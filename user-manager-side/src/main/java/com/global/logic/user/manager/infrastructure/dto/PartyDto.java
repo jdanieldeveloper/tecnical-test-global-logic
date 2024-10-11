@@ -1,15 +1,22 @@
 package com.global.logic.user.manager.infrastructure.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PartyDto {
-
-	private String partyId;
-	private String name;
+	// party fields
+	private Long partyId;
+	private String partyType;
+	private String description;
 	private String statusId;
 
 	private Date createdDate;
@@ -22,6 +29,7 @@ public class PartyDto {
 	private String userLoginId;
 	private String currentPassword;
 
-	private Set<PhoneDto> phones;
+	private List<UserPhoneDto> phonesDtos;
 
+	private List<UserRoleDto> userRolesDtos;
 }

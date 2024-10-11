@@ -1,8 +1,11 @@
 package com.global.logic.user.manager.domain.aggregate.user;
 
 
+import lombok.Value;
+
 import java.util.regex.Pattern;
 
+@Value
 public class Password {
 
     private final String value;
@@ -25,10 +28,6 @@ public class Password {
         return Pattern.compile(VALID_REGEX_VALUE, Pattern.CASE_INSENSITIVE)
                 .matcher(password)
                 .matches();
-    }
-
-    public String getValue() {
-        return value;
     }
 }
     

@@ -1,9 +1,9 @@
-package com.global.logic.user.manager.infrastructure.mybatis.mapper;
+package com.global.logic.user.manager.infrastructure.persistence.mybatis.mapper;
 
+import com.global.logic.user.manager.infrastructure.dto.PartyDto;
+import com.global.logic.user.manager.infrastructure.dto.UserRoleDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import user.manager.side.infrastructure.dto.PartyDto;
-import user.manager.side.infrastructure.dto.RoleDto;
 
 import java.util.List;
 
@@ -16,10 +16,10 @@ public interface PartyMapper {
 	
 	int saveUserLogin(PartyDto partyDto);
 
-	int saveRole(RoleDto roleDto);
+	int saveUserRole(UserRoleDto userRoleDto);
 
 	PartyDto findPartyByUserLoginId(@Param("userLoginId") String userLoginId);
 
-	List<RoleDto> findRoleByUserLoginId(@Param("userLoginId") String userLoginId);
+	List<UserRoleDto> findRoleByUserLoginId(@Param("userLoginId") String userLoginId);
 	
 }

@@ -11,8 +11,8 @@ public abstract class UserAggregate implements Aggregate {
     public void handle(CreateUserCommand command) {
     }
 
-    public User makeUser(Identifier userId, Optional<String> name, Email email, Password password, Optional<Set<Phone>> phones) {
-        return new User(userId, name, email, password, phones);
+    public User makeUser(Identifier userId, Optional<String> name, Email email, Password password, Optional<Set<Role>> roles, Optional<Set<Phone>> phones) {
+        return new User(userId, name, email, password, roles, phones);
     }
 
     public void onEvent(CreatedUserEvent event){
