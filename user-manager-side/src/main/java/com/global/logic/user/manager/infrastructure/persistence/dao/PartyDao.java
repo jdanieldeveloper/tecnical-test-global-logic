@@ -14,11 +14,13 @@ public interface PartyDao extends Dao {
 
     Long nexValueForIdentifier();
 
-    boolean saveParty(PartyDto partyDto);
+    PartyDto saveParty(PartyDto partyDto);
 
-    boolean saveUserLogin(PartyDto partyDto);
+    PartyDto saveUserLogin(PartyDto partyDto);
 
-    boolean saveUserRole(UserRoleDto userRoleDto);
+    UserRoleDto saveUserRole(UserRoleDto userRoleDto);
+
+    PartyDto saveUserWithRoles(PartyDto partyDto);
 
     PartyDto findPartyByUserLoginId(String userLoginId);
 

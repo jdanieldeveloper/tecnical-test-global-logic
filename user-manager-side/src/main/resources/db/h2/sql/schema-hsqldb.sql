@@ -46,7 +46,8 @@
 -------------------------------------------------------------------------------------------------------------------
   CREATE TABLE  PARTY (
 				PARTY_ID BIGINT NOT NULL, 				
-				PARTY_TYPE_ID VARCHAR(20),  				
+				PARTY_TYPE_ID VARCHAR(20),
+				PARTY_NAME VARCHAR(255),
 				EXTERNAL_ID VARCHAR(20), 
 				DESCRIPTION VARCHAR(255), 
 				STATUS_ID VARCHAR(20) NOT NULL, 

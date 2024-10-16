@@ -1,7 +1,6 @@
 package com.global.logic.user.manager.infrastructure.converter;
 
 import com.global.logic.user.manager.domain.aggregate.user.User;
-import com.global.logic.user.manager.domain.aggregate.user.UserIdentifier;
 import com.global.logic.user.manager.infrastructure.dto.PartyDto;
 import com.global.logic.user.manager.infrastructure.dto.UserPhoneDto;
 import com.global.logic.user.manager.infrastructure.dto.UserRoleDto;
@@ -17,7 +16,9 @@ public class FromUserConverter implements Converter<User, PartyDto> {
 
     public PartyDto convert(User user) {
         return PartyDto.builder()
-                .partyId(((UserIdentifier) user.getUserId()).getIdentifier())
+                .partyId(user.getUserId().getValue())
+				.partyUuid(user.getUserUuid().getValue())
+				.partyName(user.getName().orElse(""))
                 .userLoginId(user.getEmail().getValue())
                 .currentPassword(user.getPassword().getValue())
                 .userRolesDtos(getUserRolesDtos(user))
@@ -30,7 +31,7 @@ public class FromUserConverter implements Converter<User, PartyDto> {
                 .stream()
                 .flatMap(Collection::stream)
                 .map(role -> UserRoleDto.builder()
-                        .partyId(((UserIdentifier) user.getUserId()).getIdentifier())
+                        .partyId((user.getUserId()).getValue())
                         .roleTypeId(role.getRoleTypeId())
                         .description(role.getRoleDescription())
                         .build())
@@ -42,7 +43,7 @@ public class FromUserConverter implements Converter<User, PartyDto> {
 				.stream()
 				.flatMap(Collection::stream)
 				.map(phone -> UserPhoneDto.builder()
-						.partyId(((UserIdentifier) user.getUserId()).getIdentifier())
+						.partyId(user.getUserId().getValue())
 						.countryCode(phone.getCountryCode())
 						.cityCode(phone.getCityCode())
 						.contactNumber(phone.getNumber())

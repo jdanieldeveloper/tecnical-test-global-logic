@@ -10,16 +10,16 @@ public class IdentifierTest {
 
     @Test
     void userIdentifierSequenceIsValid() {
-        UserIdentifier userIdentifier = new UserIdentifier(1L);
+        UserId userId = new UserId(1L);
 
-        assertEquals(1L, userIdentifier.getIdentifier());
+        assertEquals(1L, userId.getIdentifier());
     }
 
     @Test
     void userIdentifierSequenceIsNotValid() {
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            UserIdentifier userIdentifier = new UserIdentifier(-1L);
+            UserId userId = new UserId(-1L);
         });
 
         assertEquals(exception.getClass(), IllegalArgumentException.class);

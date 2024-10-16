@@ -15,7 +15,9 @@ import java.util.List;
 public class PartyDto {
 	// party fields
 	private Long partyId;
+	private String partyUuid;
 	private String partyType;
+	private String partyName;
 	private String description;
 	private String statusId;
 

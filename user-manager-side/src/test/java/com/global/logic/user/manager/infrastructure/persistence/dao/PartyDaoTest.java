@@ -3,6 +3,7 @@ package com.global.logic.user.manager.infrastructure.persistence.dao;
 import com.global.logic.user.manager.infrastructure.config.UserManagerTestConfig;
 import com.global.logic.user.manager.infrastructure.dto.PartyDto;
 import com.global.logic.user.manager.infrastructure.dto.UserRoleDto;
+import com.global.logic.user.manager.infrastructure.exception.DatabaseException;
 import com.global.logic.user.manager.infrastructure.persistence.mybatis.mapper.PartyMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,9 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ContextConfiguration;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static com.global.logic.user.manager.infrastructure.fixture.UserRoleFixture.getUserRoleDtoWithVisitorCreateRole;
@@ -45,11 +44,10 @@ public class PartyDaoTest {
     public void nexValueForIdentifierNotGenerateBecauseThereIsInconsistency() {
         when(partyMapper.nexValueForIdentifier()).thenReturn(-1L);
 
-        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-            long identifier = partyDao.nexValueForIdentifier();
-        });
+        DatabaseException exception =
+                assertThrows(DatabaseException.class, () -> partyDao.nexValueForIdentifier());
 
-        assertEquals(exception.getClass(), IllegalStateException.class);
+        assertEquals(exception.getClass(), DatabaseException.class);
         assertEquals(exception.getMessage(), "Error partyId can be larger than of 0!!!");
     }
 
@@ -57,9 +55,8 @@ public class PartyDaoTest {
     public void nexValueForIdentifierNotGenerateBecauseThrowException() {
         when(partyMapper.nexValueForIdentifier()).thenThrow(new RuntimeException("Error in DataBase!!!"));
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            long identifier = partyDao.nexValueForIdentifier();
-        });
+        RuntimeException exception =
+                assertThrows(RuntimeException.class, () -> partyDao.nexValueForIdentifier());
 
         assertEquals(exception.getClass(), RuntimeException.class);
         assertEquals(exception.getMessage(), "Error in DataBase!!!");
@@ -71,8 +68,8 @@ public class PartyDaoTest {
 
         PartyDto partyDto = getPartyDtoWithAllFieldsToSave();
 
-        boolean isSaved = partyDao.saveParty(partyDto);
-        assertTrue(isSaved);
+        PartyDto partySaved = partyDao.saveParty(partyDto);
+        assertNotNull(partySaved);
     }
 
     @Test
@@ -81,13 +78,11 @@ public class PartyDaoTest {
 
         PartyDto partyDto = getPartyDtoWithAllFieldsToSave();
 
-        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-            boolean isSaved = partyDao.saveParty(partyDto);
-        });
+        DatabaseException exception =
+                assertThrows(DatabaseException.class, () -> partyDao.saveParty(partyDto));
 
-        assertEquals(exception.getClass(), IllegalStateException.class);
+        assertEquals(exception.getClass(), DatabaseException.class);
         assertEquals(exception.getMessage(), "Error row affected more than 1 when party was created!!!");
-
     }
 
     @Test
@@ -96,11 +91,10 @@ public class PartyDaoTest {
 
         PartyDto partyDto = getPartyDtoWithAllFieldsToSave();
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            boolean isSaved = partyDao.saveParty(partyDto);
-        });
+        DatabaseException exception =
+                assertThrows(DatabaseException.class, () -> partyDao.saveParty(partyDto));
 
-        assertEquals(exception.getClass(), RuntimeException.class);
+        assertEquals(exception.getClass(), DatabaseException.class);
         assertEquals(exception.getMessage(), "Error in DataBase!!!");
 
     }
@@ -111,8 +105,8 @@ public class PartyDaoTest {
 
         PartyDto partyDto = getPartyDtoWithAllFieldsToSave();
 
-        boolean isSaved = partyDao.saveUserLogin(partyDto);
-        assertTrue(isSaved);
+        PartyDto partySaved = partyDao.saveUserLogin(partyDto);
+        assertNotNull(partySaved);
     }
 
     @Test
@@ -121,11 +115,10 @@ public class PartyDaoTest {
 
         PartyDto partyDto = getPartyDtoWithAllFieldsToSave();
 
-        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-            boolean isSaved = partyDao.saveUserLogin(partyDto);
-        });
+        DatabaseException exception =
+                assertThrows(DatabaseException.class, () -> partyDao.saveUserLogin(partyDto));
 
-        assertEquals(exception.getClass(), IllegalStateException.class);
+        assertEquals(exception.getClass(), DatabaseException.class);
         assertEquals(exception.getMessage(), "Error row affected more than 1 when user was created!!!");
     }
 
@@ -135,9 +128,8 @@ public class PartyDaoTest {
 
         PartyDto partyDto = getPartyDtoWithAllFieldsToSave();
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            boolean isSaved = partyDao.saveUserLogin(partyDto);
-        });
+        RuntimeException exception =
+                assertThrows(RuntimeException.class, () -> partyDao.saveUserLogin(partyDto));
 
         assertEquals(exception.getClass(), RuntimeException.class);
         assertEquals(exception.getMessage(), "Error in DataBase!!!");
@@ -148,18 +140,18 @@ public class PartyDaoTest {
         when(partyMapper.saveUserRole(any(UserRoleDto.class))).thenReturn(1);
 
         UserRoleDto roleCreate = getUserRoleDtoWithVisitorCreateRole();
-        boolean isSavedRole = partyDao.saveUserRole(roleCreate);
-        assertTrue(isSavedRole);
+        UserRoleDto roleSaved = partyDao.saveUserRole(roleCreate);
+        assertNotNull(roleSaved);
     }
 
     @Test
     public void saveUserRoleNotCreatedBecauseThereIsInconsistency()  {
         when(partyMapper.saveUserRole(any(UserRoleDto.class))).thenReturn(2);
 
-        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-            UserRoleDto roleCreate = getUserRoleDtoWithVisitorCreateRole();
-            boolean isSavedRole = partyDao.saveUserRole(roleCreate);
-        });
+        UserRoleDto roleCreate = getUserRoleDtoWithVisitorCreateRole();
+
+        IllegalStateException exception =
+                assertThrows(IllegalStateException.class, () -> partyDao.saveUserRole(roleCreate));
 
         assertEquals(exception.getClass(), IllegalStateException.class);
         assertEquals(exception.getMessage(), "Error row affected more than 1 when user role was created!!!");
@@ -169,10 +161,10 @@ public class PartyDaoTest {
     public void saveUserRoleNotCreatedBecauseThrowException() {
         when(partyMapper.saveUserRole(any(UserRoleDto.class))).thenThrow(new RuntimeException("Error in DataBase!!!"));
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            UserRoleDto roleCreate = getUserRoleDtoWithVisitorCreateRole();
-            boolean isSavedRole = partyDao.saveUserRole(roleCreate);
-        });
+        UserRoleDto roleCreate = getUserRoleDtoWithVisitorCreateRole();
+
+        RuntimeException exception =
+                assertThrows(RuntimeException.class, () -> partyDao.saveUserRole(roleCreate));
 
         assertEquals(exception.getClass(), RuntimeException.class);
         assertEquals(exception.getMessage(), "Error in DataBase!!!");
