@@ -1,8 +1,8 @@
-package com.global.logic.user.command.domain.aggregate.user;
+package com.global.logic.user.command.domain.user;
 
 import com.global.logic.user.command.application.command.CreateUserCommand;
 import com.global.logic.user.command.application.event.CreatedUserEvent;
-import com.global.logic.user.command.domain.aggregate.Aggregate;
+import com.global.logic.user.command.domain.Aggregate;
 
 import java.util.Optional;
 import java.util.Set;

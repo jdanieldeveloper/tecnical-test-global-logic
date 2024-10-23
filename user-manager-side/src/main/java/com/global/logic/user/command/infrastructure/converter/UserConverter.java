@@ -1,6 +1,6 @@
 package com.global.logic.user.command.infrastructure.converter;
 
-import com.global.logic.user.command.domain.aggregate.user.*;
+import com.global.logic.user.command.domain.user.*;
 import com.global.logic.user.command.infrastructure.api.model.PhoneModel;
 import com.global.logic.user.command.infrastructure.dto.PartyDto;
 import com.global.logic.user.command.infrastructure.dto.UserPhoneDto;
@@ -20,7 +20,7 @@ public class UserConverter {
 
     public static Function<PartyDto, User> partyDtoToUser = partyDto ->
             new User(new UserId(partyDto.getPartyId()),
-                    new UserUuid(partyDto.getUserLoginId()),
+                    new UserUuid(partyDto.getPartyUuid()),
                     new Type(partyDto.getPartyType()),
                     Optional.ofNullable(partyDto.getPartyName()),
                     new Email(partyDto.getUserLoginId()),

@@ -1,15 +1,14 @@
-package com.global.logic.user.command.application.aggregate.impl;
+package com.global.logic.user.command.application.aggregate;
 
 import com.global.logic.user.command.application.command.CreateUserCommand;
 import com.global.logic.user.command.application.event.CreatedUserEvent;
-import com.global.logic.user.command.domain.aggregate.user.*;
+import com.global.logic.user.command.domain.user.*;
 import com.global.logic.user.command.infrastructure.enums.RoleEnum;
 import com.global.logic.user.command.infrastructure.enums.UserTypeEnum;
 import com.global.logic.user.command.infrastructure.exception.BusinessException;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintViolation;
@@ -27,7 +26,7 @@ public class UserAggregateImpl extends UserAggregate {
     private Validator userValidator;
     private UserRepository userRepository;
 
-    @Autowired
+    //@Autowired
     //private EventHandler eventHandler;
 
     @Override

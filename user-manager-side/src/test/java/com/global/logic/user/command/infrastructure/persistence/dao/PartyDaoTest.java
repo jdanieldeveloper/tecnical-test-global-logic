@@ -55,10 +55,10 @@ public class PartyDaoTest {
     public void nexValueForIdentifierNotGenerateBecauseThrowException() {
         when(partyMapper.nexValueForIdentifier()).thenThrow(new RuntimeException("Error in DataBase!!!"));
 
-        RuntimeException exception =
-                assertThrows(RuntimeException.class, () -> partyDao.nexValueForIdentifier());
+        DatabaseException exception =
+                assertThrows(DatabaseException.class, () -> partyDao.nexValueForIdentifier());
 
-        assertEquals(exception.getClass(), RuntimeException.class);
+        assertEquals(exception.getClass(), DatabaseException.class);
         assertEquals(exception.getMessage(), "Error in DataBase!!!");
     }
 
@@ -128,10 +128,10 @@ public class PartyDaoTest {
 
         PartyDto partyDto = getPartyDtoWithAllFieldsToSave();
 
-        RuntimeException exception =
-                assertThrows(RuntimeException.class, () -> partyDao.saveUserLogin(partyDto));
+        DatabaseException exception =
+                assertThrows(DatabaseException.class, () -> partyDao.saveUserLogin(partyDto));
 
-        assertEquals(exception.getClass(), RuntimeException.class);
+        assertEquals(exception.getClass(), DatabaseException.class);
         assertEquals(exception.getMessage(), "Error in DataBase!!!");
     }
 
@@ -150,10 +150,10 @@ public class PartyDaoTest {
 
         UserRoleDto roleCreate = getUserRoleDtoWithVisitorCreateRole();
 
-        IllegalStateException exception =
-                assertThrows(IllegalStateException.class, () -> partyDao.saveUserRole(roleCreate));
+        DatabaseException exception =
+                assertThrows(DatabaseException.class, () -> partyDao.saveUserRole(roleCreate));
 
-        assertEquals(exception.getClass(), IllegalStateException.class);
+        assertEquals(exception.getClass(), DatabaseException.class);
         assertEquals(exception.getMessage(), "Error row affected more than 1 when user role was created!!!");
     }
 
@@ -163,10 +163,10 @@ public class PartyDaoTest {
 
         UserRoleDto roleCreate = getUserRoleDtoWithVisitorCreateRole();
 
-        RuntimeException exception =
-                assertThrows(RuntimeException.class, () -> partyDao.saveUserRole(roleCreate));
+        DatabaseException exception =
+                assertThrows(DatabaseException.class, () -> partyDao.saveUserRole(roleCreate));
 
-        assertEquals(exception.getClass(), RuntimeException.class);
+        assertEquals(exception.getClass(), DatabaseException.class);
         assertEquals(exception.getMessage(), "Error in DataBase!!!");
     }
 }

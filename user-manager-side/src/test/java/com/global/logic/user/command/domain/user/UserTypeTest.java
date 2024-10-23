@@ -1,4 +1,4 @@
-package com.global.logic.user.command.domain.aggregate.user;
+package com.global.logic.user.command.domain.user;
 
 import com.global.logic.user.command.infrastructure.enums.UserTypeEnum;
 import org.junit.jupiter.api.BeforeAll;
@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 

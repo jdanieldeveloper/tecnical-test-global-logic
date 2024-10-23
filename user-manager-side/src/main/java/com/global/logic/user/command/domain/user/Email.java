@@ -1,4 +1,4 @@
-package com.global.logic.user.command.domain.aggregate.user;
+package com.global.logic.user.command.domain.user;
 
 
 import lombok.Value;

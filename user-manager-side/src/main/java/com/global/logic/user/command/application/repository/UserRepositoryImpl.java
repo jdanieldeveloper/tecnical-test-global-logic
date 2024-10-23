@@ -1,9 +1,9 @@
-package com.global.logic.user.command.application.repository.impl;
+package com.global.logic.user.command.application.repository;
 
-import com.global.logic.user.command.domain.aggregate.user.User;
-import com.global.logic.user.command.domain.aggregate.user.UserId;
-import com.global.logic.user.command.domain.aggregate.user.UserRepository;
-import com.global.logic.user.command.domain.aggregate.user.UserUuid;
+import com.global.logic.user.command.domain.user.User;
+import com.global.logic.user.command.domain.user.UserId;
+import com.global.logic.user.command.domain.user.UserRepository;
+import com.global.logic.user.command.domain.user.UserUuid;
 import com.global.logic.user.command.infrastructure.persistence.dao.PartyDao;
 import io.vavr.control.Either;
 import io.vavr.control.Try;
@@ -37,11 +37,12 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Either<Throwable, User> addUser(User user) {
-        return Try.of(
+        return Try.of(() ->
                         Optional.ofNullable(user)
                                 .map(userToPartyDto)
                                 .map(partyDao::saveUserWithRoles)
-                                .map(partyDtoToUser)::get)
+                                .map(partyDtoToUser)
+                                .orElseThrow(IllegalStateException::new))
                 .toEither();
     }
 }

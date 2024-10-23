@@ -1,6 +1,6 @@
-package com.global.logic.user.command.domain.aggregate.user;
+package com.global.logic.user.command.domain.user;
 
-import com.global.logic.user.command.domain.aggregate.Repository;
+import com.global.logic.user.command.domain.Repository;
 import io.vavr.control.Either;
 
 public interface UserRepository extends Repository {

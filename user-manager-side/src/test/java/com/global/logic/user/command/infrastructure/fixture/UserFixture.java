@@ -1,6 +1,6 @@
 package com.global.logic.user.command.infrastructure.fixture;
 
-import com.global.logic.user.command.domain.aggregate.user.*;
+import com.global.logic.user.command.domain.user.*;
 import com.global.logic.user.command.infrastructure.enums.RoleEnum;
 import com.global.logic.user.command.infrastructure.enums.UserTypeEnum;
 

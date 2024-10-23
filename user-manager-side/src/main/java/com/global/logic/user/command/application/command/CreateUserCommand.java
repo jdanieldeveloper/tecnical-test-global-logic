@@ -1,6 +1,6 @@
 package com.global.logic.user.command.application.command;
 
-import com.global.logic.user.command.domain.aggregate.user.Phone;
+import com.global.logic.user.command.domain.user.Phone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
