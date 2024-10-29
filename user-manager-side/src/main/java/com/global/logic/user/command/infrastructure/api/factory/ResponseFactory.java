@@ -4,11 +4,9 @@ import com.global.logic.user.command.infrastructure.api.model.ErrorModelResp;
 import com.global.logic.user.command.infrastructure.exception.*;
 
 import com.global.logic.user.query.infraestructure.exception.UserNotFoundException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 

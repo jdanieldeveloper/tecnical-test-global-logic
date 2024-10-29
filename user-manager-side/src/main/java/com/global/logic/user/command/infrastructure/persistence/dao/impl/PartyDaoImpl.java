@@ -82,6 +82,9 @@ public class PartyDaoImpl implements PartyDao {
     public PartyDto saveUserLogin(PartyDto partyDto) {
         int rowAffected;
         try {
+            // default values
+            partyDto.setLastLoginDate(LocalDateTime.now());
+
             rowAffected = partyMapper.saveUserLogin(partyDto);
             if (rowAffected == 1) {
                 log.info("User was created correctly!!!");
@@ -142,7 +145,7 @@ public class PartyDaoImpl implements PartyDao {
 
     @Override
     public PartyDto findPartyByUserLoginId(String userLoginId) {
-        PartyDto partyDto = null;
+        PartyDto partyDto;
         try {
             partyDto = partyMapper.findPartyByUserLoginId(userLoginId);
             if (Objects.nonNull(partyDto)) {

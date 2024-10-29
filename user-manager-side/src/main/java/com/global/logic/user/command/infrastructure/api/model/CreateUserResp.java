@@ -24,7 +24,7 @@ public class CreateUserResp implements Serializable {
     @JsonProperty(value = "lastLogin")
     private LocalDateTime lastLoginDate;
 
-    @JsonProperty(value = "lastLogin")
+    @JsonProperty(value = "token")
     private String token;
 
     @JsonProperty(value = "isActive")

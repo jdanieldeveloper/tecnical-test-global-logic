@@ -8,7 +8,7 @@ import com.global.logic.user.command.infrastructure.api.model.CreateUserReq;
 import com.global.logic.user.command.infrastructure.api.model.CreateUserResp;
 import com.global.logic.user.command.infrastructure.dto.PartyDto;
 import com.global.logic.user.command.infrastructure.exception.CustomException;
-import com.global.logic.user.query.application.gateway.UserQueryGateWay;
+import com.global.logic.user.query.application.gateway.UserQueryGateway;
 import com.global.logic.user.query.infraestructure.exception.UserNotFoundException;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
@@ -27,7 +27,7 @@ import java.util.List;
 public class UserCmdApi {
 
     private CommandHandler commandHandler;
-    private UserQueryGateWay userQueryGateWay;
+    private UserQueryGateway userQueryGateWay;
 
     @PostMapping(value = "/api/command/user/sign-up")
     public ResponseEntity<?> creteUser(@RequestBody CreateUserReq request) {

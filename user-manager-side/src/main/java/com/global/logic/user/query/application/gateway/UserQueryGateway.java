@@ -8,9 +8,10 @@ import io.vavr.control.Either;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Component
-public class UserQueryGateWay {
+public class UserQueryGateway {
 
     public Either<UserNotFoundException, PartyDto> getUserByUuid(String uuid) {
         return Either.right(getMockPartyDtoAllFiels());
@@ -19,6 +20,7 @@ public class UserQueryGateWay {
     private PartyDto getMockPartyDtoAllFiels() {
         return PartyDto.builder()
                 .partyId(1L)
+                .partyUuid(UUID.randomUUID().toString())
                 .partyType(UserTypeEnum.VISITOR.getTypeId())
                 .partyName("Daniel Carvajal")
                 .description("Description Mock")
@@ -26,6 +28,7 @@ public class UserQueryGateWay {
                 //
                 .createdDate(LocalDateTime.now())
                 .createByUserLogin("dcarvajal3@gmail.com")
+                .lastLoginDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
                 .lastModifiedByUserLogin("dcarvajal3@gmail.com")
                 //
