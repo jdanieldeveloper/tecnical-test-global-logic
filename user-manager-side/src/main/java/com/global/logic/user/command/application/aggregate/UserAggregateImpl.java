@@ -1,11 +1,11 @@
 package com.global.logic.user.command.application.aggregate;
 
-import com.global.logic.user.command.application.command.CreateUserCommand;
+import com.global.logic.user.command.application.cmd.CreateUserCmd;
 import com.global.logic.user.command.application.event.CreatedUserEvent;
 import com.global.logic.user.command.domain.user.*;
 import com.global.logic.user.command.infrastructure.enums.RoleEnum;
 import com.global.logic.user.command.infrastructure.enums.UserTypeEnum;
-import com.global.logic.user.command.infrastructure.exception.BusinessException;
+import com.global.logic.user.command.infrastructure.exception.DomainException;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,25 +23,25 @@ import java.util.stream.Collectors;
 @AllArgsConstructor // DI by constructor
 public class UserAggregateImpl extends UserAggregate {
 
-    private Validator userValidator;
+    private Validator validator;
     private UserRepository userRepository;
 
     //@Autowired
     //private EventHandler eventHandler;
 
     @Override
-    public CreateUserCommand handle(CreateUserCommand command) {
+    public CreateUserCmd handle(CreateUserCmd command) {
         // generated userId
         Either<Throwable, UserId> userIdGenerated = userRepository.getUserId();
         if (userIdGenerated.isLeft()) { // if exist infra error
-            return CreateUserCommand.builder()
+            return CreateUserCmd.builder()
                     .errors(List.of(userIdGenerated.getLeft()))
                     .build();
         }
         // generated userUuid
         Either<Throwable, UserUuid> userUuidGenerated = userRepository.getUserUuid();
-        if (userIdGenerated.isLeft())  // if exist infra error
-            return CreateUserCommand.builder()
+        if (userUuidGenerated.isLeft())  // if exist infra error
+            return CreateUserCmd.builder()
                     .errors(List.of(userUuidGenerated.getLeft()))
                     .build();
 
@@ -72,7 +72,7 @@ public class UserAggregateImpl extends UserAggregate {
         // validate user before store
         Either<List<Throwable>, User> validatedUser = isValid(user);
         if(validatedUser.isLeft()) { // if exist domain errors
-             return CreateUserCommand.builder()
+             return CreateUserCmd.builder()
                     .errors(validatedUser.getLeft())
                     .build();
         }
@@ -80,7 +80,7 @@ public class UserAggregateImpl extends UserAggregate {
         // add the user to store
         Either<Throwable, User> addedUser = userRepository.addUser(user);
         if (addedUser.isLeft()) { // if exist infra error
-            return CreateUserCommand.builder()
+            return CreateUserCmd.builder()
                     .errors(List.of(addedUser.getLeft()))
                     .build();
         }
@@ -88,21 +88,21 @@ public class UserAggregateImpl extends UserAggregate {
         // if you want can send the business event and propagate action
         //handle(new CreateUserCommand(...)
 
-        return CreateUserCommand.builder()
+        return CreateUserCmd.builder()
                 .userUuid(user.getUserUuid().getValue())
                 .build();
     }
 
 
     public Either<List<Throwable>, User> isValid(User user) {
-        Set<ConstraintViolation<User>> violations = userValidator.validate(user);
-        if (violations.isEmpty()) {
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+          if (violations.isEmpty()) {
             return Either.right(user);
         } else {
             return Either.left(
                     violations.stream()
                             .map(ConstraintViolation::getMessage)
-                            .map(BusinessException::new)
+                            .map(DomainException::new)
                             .collect(Collectors.toList()));
         }
     }

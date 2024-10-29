@@ -1,6 +1,6 @@
 package com.global.logic.user.command.domain.user;
 
-import com.global.logic.user.command.application.command.CreateUserCommand;
+import com.global.logic.user.command.application.cmd.CreateUserCmd;
 import com.global.logic.user.command.application.event.CreatedUserEvent;
 import com.global.logic.user.command.domain.Aggregate;
 
@@ -10,7 +10,7 @@ import java.util.Set;
 public abstract class UserAggregate implements Aggregate {
 
 
-    public abstract CreateUserCommand handle(CreateUserCommand command);
+    public abstract CreateUserCmd handle(CreateUserCmd command);
 
     public User makeUser(UserId userId,
                          UserUuid userUuid,

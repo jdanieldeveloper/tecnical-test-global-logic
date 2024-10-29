@@ -1,14 +1,14 @@
 package com.global.logic.user.command.infrastructure.exception;
 
-public class BusinessException extends CustomException {
+public class DomainException extends CustomException {
 
-    private static final int CUSTOM_ERROR_CODE = 1030;
+    private static final int CUSTOM_ERROR_CODE = 1010;
 
-    public BusinessException(String message){
+    public DomainException(String message){
         super(CUSTOM_ERROR_CODE, message);
     }
 
-    public BusinessException(String message, Throwable cause){
+    public DomainException(String message, Throwable cause){
         super(CUSTOM_ERROR_CODE, message, cause);
     }
 

@@ -1,18 +1,26 @@
 package com.global.logic.user.command.infrastructure.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 @Data
-public class PhoneModel {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class PhoneModel implements Serializable {
 
     @JsonProperty(value = "countryCode")
-    private final String countryCode;
+    private String countryCode;
 
     @JsonProperty(value = "cityCode")
-    private final int cityCode;
+    private int cityCode;
 
     @JsonProperty(value = "number")
-    private final long number;
+    private long number;
 
 }

@@ -1,10 +1,11 @@
-package com.global.logic.user.command.application.command;
+package com.global.logic.user.command.application.cmd;
 
 import com.global.logic.user.command.domain.user.Phone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Singular;
 
 import java.util.List;
 import java.util.Set;
@@ -14,12 +15,11 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateUserCommand {
+public class CreateUserCmd {
 	// input
 	public String name;
 	public String email;
 	public String password;
-	public String currentPassword;
 	public Set<Phone> phones;
 
 	// output
@@ -27,9 +27,10 @@ public class CreateUserCommand {
 	public String userToken;
 
 	//errors
+	@Singular
 	public List<Throwable> errors;
 
 	public boolean hasErrors(){
-		return errors.isEmpty();
+		return !errors.isEmpty();
 	}
 }

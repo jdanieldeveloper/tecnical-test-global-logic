@@ -19,7 +19,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan({"com.global.logic.user.command"})
+@ComponentScan({"com.global.logic.user"})
 @MapperScan({"com.global.logic.user.command.infrastructure.persistence.mybatis.mapper"})
 public class UserManageSideConfig {
 

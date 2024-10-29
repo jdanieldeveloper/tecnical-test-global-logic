@@ -1,10 +1,7 @@
 package com.global.logic.user.command.infrastructure.dto;
 
 import com.global.logic.user.command.infrastructure.enums.UserStatusEnum;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +22,7 @@ public class PartyDto {
 	private LocalDateTime createdDate;
 	private String createByUserLogin;
 
+	private LocalDateTime lastLoginDate;
 	private LocalDateTime lastModifiedDate;
 	private String lastModifiedByUserLogin;
 
@@ -32,8 +30,10 @@ public class PartyDto {
 	private String userLoginId;
 	private String currentPassword;
 
+	@Singular
 	private List<UserPhoneDto> phonesDtos;
 
+	@Singular
 	private List<UserRoleDto> userRolesDtos;
 
 	public boolean isActive() {
