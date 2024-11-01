@@ -46,7 +46,8 @@
 -- EVERYTHING THAT CAN INTERACT WITH THE SYSTEM CAN BE A PARTY FROM A USER TO A GOVERNMENT ETC.
 -------------------------------------------------------------------------------------------------------------------
   CREATE TABLE  PARTY (
-				PARTY_ID BIGINT NOT NULL, 				
+				PARTY_ID BIGINT NOT NULL,
+				PARTY_UUID VARCHAR(36),
 				PARTY_TYPE_ID VARCHAR(20),
 				PARTY_NAME VARCHAR(255),
 				EXTERNAL_ID VARCHAR(20), 

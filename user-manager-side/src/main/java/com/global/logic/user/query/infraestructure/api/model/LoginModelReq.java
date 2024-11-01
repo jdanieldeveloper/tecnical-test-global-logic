@@ -14,10 +14,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class LoginModelReq implements Serializable {
 
-    @JsonProperty(value = "userLogin")
-    public String userLogin;
+    @JsonProperty(value = "email")
+    public String email;
 
-    @JsonProperty(value = "currentPassword")
-    public String currentPassword;
+    @JsonProperty(value = "password")
+    public String password;
 
 }

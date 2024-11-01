@@ -2,16 +2,16 @@ package com.global.logic.user.command.infrastructure.config;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import javax.sql.DataSource;
 
-@TestConfiguration
+@Configuration
 @EnableAutoConfiguration
 @ComponentScan({"com.global.logic.user"})
 @MapperScan({"com.global.logic.user.command.infrastructure.persistence.mybatis.mapper"})

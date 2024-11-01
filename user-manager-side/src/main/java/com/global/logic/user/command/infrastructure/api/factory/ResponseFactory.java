@@ -3,6 +3,7 @@ package com.global.logic.user.command.infrastructure.api.factory;
 import com.global.logic.user.command.infrastructure.api.model.ErrorModelResp;
 import com.global.logic.user.command.infrastructure.exception.*;
 
+import com.global.logic.user.query.infraestructure.exception.UserAuthenticationException;
 import com.global.logic.user.query.infraestructure.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,8 @@ public class ResponseFactory {
                         response -> getHttp500InternalServerStatusErrors(errors)),
                 Case($(clazz -> clazz.equals(UserNotFoundException.class)),
                         response -> getHttp404NotFoundStatusErrors(errors)),
+                Case($(clazz -> clazz.equals(UserAuthenticationException.class)),
+                        response -> getHttp401UnauthorizedStatusErrors(errors)),
                 Case($(),
                         response -> getHttp500InternalServerStatusErrors(errors))
         );
@@ -48,6 +51,13 @@ public class ResponseFactory {
     private static ResponseEntity<?> getHttp500InternalServerStatusErrors(List<Throwable> errors) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                //.headers()
+                .body(createCustomError(errors));
+    }
+
+    private static ResponseEntity<?> getHttp401UnauthorizedStatusErrors(List<Throwable> errors) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
                 //.headers()
                 .body(createCustomError(errors));
     }

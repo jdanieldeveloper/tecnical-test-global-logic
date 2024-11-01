@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -23,8 +24,11 @@ public class CreateUserCmd {
 	public Set<Phone> phones;
 
 	// output
-	public String userUuid;
-	public String userToken;
+	public String uuid;
+	private LocalDateTime createdDate;
+	private LocalDateTime lastLoginDate;
+	private boolean isActive;
+
 
 	//errors
 	@Singular

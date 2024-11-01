@@ -6,10 +6,9 @@ import com.global.logic.user.command.application.handler.CommandHandler;
 import com.global.logic.user.command.infrastructure.api.factory.ResponseFactory;
 import com.global.logic.user.command.infrastructure.api.model.CreateUserReq;
 import com.global.logic.user.command.infrastructure.api.model.CreateUserResp;
-import com.global.logic.user.command.infrastructure.dto.PartyDto;
 import com.global.logic.user.command.infrastructure.exception.CustomException;
 import com.global.logic.user.query.application.gateway.UserQueryGateway;
-import com.global.logic.user.query.infraestructure.exception.UserNotFoundException;
+import com.global.logic.user.query.infraestructure.exception.UserAuthenticationException;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +26,7 @@ import java.util.List;
 public class UserCmdApi {
 
     private CommandHandler commandHandler;
-    private UserQueryGateway userQueryGateWay;
+    private UserQueryGateway userQueryGateway;
 
     @PostMapping(value = "/api/command/user/sign-up")
     public ResponseEntity<?> creteUser(@RequestBody CreateUserReq request) {
@@ -42,26 +41,27 @@ public class UserCmdApi {
                         .phones(request.getPhones())
                         .build());
 
-        if (!createUserCmd.hasErrors()) {
-            log.info("User [{}] has been created correctly!!!", request.getName());
-
-            // get data from store
-            Either<UserNotFoundException, PartyDto> userCreated = userQueryGateWay.getUserByUuid(createUserCmd.getUserUuid());
-            if (userCreated.isLeft()) {
-                return ResponseFactory.createError(UserNotFoundException.class, List.of(userCreated.getLeft()));
-            } else {
-                return ResponseFactory.createSuccess(
-                        CreateUserResp.builder()
-                                .uuid(userCreated.get().getPartyUuid())
-                                .createdDate(userCreated.get().getCreatedDate())
-                                .lastLoginDate(userCreated.get().getLastLoginDate())
-                                //.token()
-                                .isActive(userCreated.get().isActive())
-                                .build()
-                );
-            }
-        } else {
+        if (createUserCmd.hasErrors()) {
             return ResponseFactory.createError(CustomException.class, createUserCmd.getErrors());
         }
+        log.info("User [{}] has been created correctly!!!", request.getName());
+
+        // auth user and generate token
+        Either<UserAuthenticationException, String> userAuthToken =
+                userQueryGateway.createAuthenticationToken(createUserCmd.getEmail(), createUserCmd.getPassword());
+        if (userAuthToken.isLeft()) {
+            return ResponseFactory.createError(UserAuthenticationException.class, List.of(userAuthToken.getLeft()));
+        }
+        log.info("User [{}] has been auth correctly!!!", request.getName());
+
+        return ResponseFactory.createSuccess(
+                CreateUserResp.builder()
+                        .uuid(createUserCmd.getUuid())
+                        .createdDate(createUserCmd.getCreatedDate())
+                        .lastLoginDate(createUserCmd.getLastLoginDate())
+                        .token(userAuthToken.get())
+                        .isActive(createUserCmd.isActive())
+                        .build()
+        );
     }
 }

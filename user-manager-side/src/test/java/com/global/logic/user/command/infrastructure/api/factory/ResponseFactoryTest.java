@@ -5,6 +5,7 @@ import com.global.logic.user.command.infrastructure.exception.BusinessException;
 import com.global.logic.user.command.infrastructure.exception.CustomException;
 import com.global.logic.user.command.infrastructure.exception.DatabaseException;
 import com.global.logic.user.command.infrastructure.exception.DomainException;
+import com.global.logic.user.query.infraestructure.exception.UserAuthenticationException;
 import com.global.logic.user.query.infraestructure.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -99,5 +100,20 @@ public class ResponseFactoryTest {
 
         assertTrue(errorModelResp.getCustomErrors().stream()
                 .anyMatch(customError -> customError.getDetail().equals( "There is any User not found problem")));
+    }
+
+    @Test
+    public void createResponseHttp401UnauthorizedErrorWhenIsUserNotFoundException(){
+        ResponseEntity<?> response = ResponseFactory.createError(
+                UserAuthenticationException.class, List.of(new UserAuthenticationException("There is Auth problem")));
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+
+        ErrorModelResp errorModelResp = (ErrorModelResp) response.getBody();
+        assertNotNull(errorModelResp.getCustomErrors());
+        assertTrue(errorModelResp.getCustomErrors().stream()
+                .anyMatch(customError -> customError.getCode() == UserAuthenticationException.getErrorCode()));
+
+        assertTrue(errorModelResp.getCustomErrors().stream()
+                .anyMatch(customError -> customError.getDetail().equals( "There is Auth problem")));
     }
 }

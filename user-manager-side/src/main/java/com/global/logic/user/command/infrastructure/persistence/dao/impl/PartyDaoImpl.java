@@ -9,14 +9,12 @@ import com.global.logic.user.command.infrastructure.persistence.dao.PartyDao;
 import com.global.logic.user.command.infrastructure.persistence.mybatis.mapper.PartyMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -28,6 +26,9 @@ public class PartyDaoImpl implements PartyDao {
 
     @Autowired
     private PartyMapper partyMapper;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
 
     @Override
@@ -84,6 +85,8 @@ public class PartyDaoImpl implements PartyDao {
         try {
             // default values
             partyDto.setLastLoginDate(LocalDateTime.now());
+            // encode pass for security
+            partyDto.setCurrentPassword(passwordEncoder.encode(partyDto.getCurrentPassword()));
 
             rowAffected = partyMapper.saveUserLogin(partyDto);
             if (rowAffected == 1) {
@@ -148,14 +151,16 @@ public class PartyDaoImpl implements PartyDao {
         PartyDto partyDto;
         try {
             partyDto = partyMapper.findPartyByUserLoginId(userLoginId);
+
             if (Objects.nonNull(partyDto)) {
                 List<UserRoleDto> userRolesDtos = findRoleByUserLoginId(userLoginId);
                 partyDto.setUserRolesDtos(userRolesDtos);
                 //
                 log.info("The party by user login was found!!!");
             } else {
-
                 log.info("The party by user login wasn't found!!!");
+                //
+                throw new DatabaseException("The party by user login wasn't found!!!");
             }
         } catch (Exception e) {
             log.error("Error while find party by user login!!!", e);
@@ -174,6 +179,8 @@ public class PartyDaoImpl implements PartyDao {
                 log.info("The roles by user login was found!!!");
             } else {
                 log.info("The roles by user login wasn't found!!!");
+
+                userRoleDtos = List.of();
             }
 
         } catch (Exception e) {
@@ -182,5 +189,28 @@ public class PartyDaoImpl implements PartyDao {
             throw new DatabaseException(e.getMessage(), e);
         }
         return userRoleDtos;
+    }
+
+    @Override
+    public PartyDto findPartyByUuid(String userUuid) {
+        PartyDto partyDto;
+        try {
+            partyDto = partyMapper.findPartyByUuid(userUuid);
+            if (Objects.nonNull(partyDto)) {
+                List<UserRoleDto> userRolesDtos = findRoleByUserLoginId(partyDto.getUserLoginId());
+                partyDto.setUserRolesDtos(userRolesDtos);
+                //
+                log.info("The party by user uuid was found!!!");
+            } else {
+                log.info("The party by user uuid wasn't found!!!");
+                //
+                throw new DatabaseException("The party by user uuid wasn't found!!!");
+            }
+        } catch (Exception e) {
+            log.error("Error while find party by user uuid!!!", e);
+            //
+            throw new DatabaseException(e.getMessage(), e);
+        }
+        return partyDto;
     }
 }

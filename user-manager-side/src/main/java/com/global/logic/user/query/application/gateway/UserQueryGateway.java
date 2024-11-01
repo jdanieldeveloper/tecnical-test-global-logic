@@ -1,39 +1,33 @@
 package com.global.logic.user.query.application.gateway;
 
 import com.global.logic.user.command.infrastructure.dto.PartyDto;
-import com.global.logic.user.command.infrastructure.enums.UserStatusEnum;
-import com.global.logic.user.command.infrastructure.enums.UserTypeEnum;
+import com.global.logic.user.query.application.service.UserQueryService;
+import com.global.logic.user.query.infraestructure.exception.UserAuthenticationException;
 import com.global.logic.user.query.infraestructure.exception.UserNotFoundException;
 import io.vavr.control.Either;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 @Component
+@AllArgsConstructor
 public class UserQueryGateway {
 
-    public Either<UserNotFoundException, PartyDto> getUserByUuid(String uuid) {
-        return Either.right(getMockPartyDtoAllFiels());
+    private UserQueryService userQueryService;
+
+    public Either<UserNotFoundException, PartyDto> getUserByUserLoginId(String userLoginId) {
+        return userQueryService.getUserByUserLoginId(userLoginId);
     }
 
-    private PartyDto getMockPartyDtoAllFiels() {
-        return PartyDto.builder()
-                .partyId(1L)
-                .partyUuid(UUID.randomUUID().toString())
-                .partyType(UserTypeEnum.VISITOR.getTypeId())
-                .partyName("Daniel Carvajal")
-                .description("Description Mock")
-                .statusId(UserStatusEnum.ENABLED.getStatusId())
-                //
-                .createdDate(LocalDateTime.now())
-                .createByUserLogin("dcarvajal3@gmail.com")
-                .lastLoginDate(LocalDateTime.now())
-                .lastModifiedDate(LocalDateTime.now())
-                .lastModifiedByUserLogin("dcarvajal3@gmail.com")
-                //
-                .userLoginId("dcarvajal3@gmail.com")
-                .currentPassword("123456789")
-                .build();
+    public Either<UserNotFoundException, PartyDto> getUserByUuid(String uuid) {
+        return userQueryService.getUserByUuid(uuid);
+    }
+
+    public Either<UserAuthenticationException, String> createAuthenticationToken(String userLoginId, String password) {
+        return userQueryService.createAuthenticationToken(userLoginId, password);
+    }
+
+    public Either<UserAuthenticationException, Boolean> validateAuthenticationToken(
+            String userLoginId, String password, String authToken) {
+        return userQueryService.validateAuthenticationToken(userLoginId, password, authToken);
     }
 }

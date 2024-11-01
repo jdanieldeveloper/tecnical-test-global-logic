@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -85,11 +86,20 @@ public class UserAggregateImpl extends UserAggregate {
                     .build();
         }
 
-        // if you want can send the business event and propagate action
+        // if you want send the business event and propagate action
         //handle(new CreateUserCommand(...)
 
         return CreateUserCmd.builder()
-                .userUuid(user.getUserUuid().getValue())
+                // input
+                .name(command.getName())
+                .email(command.getEmail())
+                .password(command.getPassword())
+                .phones(command.getPhones())
+                // output
+                .uuid(user.getUserUuid().getValue())
+                .createdDate(LocalDateTime.now())
+                .lastLoginDate(LocalDateTime.now())
+                .isActive(true)
                 .build();
     }
 
