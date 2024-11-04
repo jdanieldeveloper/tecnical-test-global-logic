@@ -49,7 +49,7 @@ public class UserCmdApiTest {
     @Test
     public void createUserAndGetHttp200Ok() throws Exception {
         // setup
-        when(partyMapper.nexValueForIdentifier()).thenReturn(1L);
+        when(partyMapper.nextValueForIdentifier()).thenReturn(1L);
         when(partyMapper.saveParty(any())).thenReturn(1);
         when(partyMapper.saveUserLogin(any())).thenReturn(1);
         when(partyMapper.saveUserRole(any())).thenReturn(1);
@@ -72,7 +72,7 @@ public class UserCmdApiTest {
                 .andExpect(jsonPath("$.isActive").exists());
 
         // verify
-        verify(partyMapper, times(1)).nexValueForIdentifier();
+        verify(partyMapper, times(1)).nextValueForIdentifier();
         verify(partyMapper, times(1)).saveParty(any());
         verify(partyMapper, times(1)).saveUserLogin(any());
         // save 2 roles for default
@@ -133,7 +133,7 @@ public class UserCmdApiTest {
     @Test
     public void noCreateUserBecauseGetHttp500InternalServerError() throws Exception {
         // setup
-        when(partyMapper.nexValueForIdentifier()).thenThrow(new DatabaseException("There is Database problem"));
+        when(partyMapper.nextValueForIdentifier()).thenThrow(new DatabaseException("There is Database problem"));
         //
         mockMvc.perform(post("/api/command/user/sign-up")
                         .contentType("application/json")
@@ -145,13 +145,13 @@ public class UserCmdApiTest {
                 .andExpect(jsonPath("$.errors[0].detail").value("There is Database problem"));
 
         // verify
-        verify(partyMapper, times(1)).nexValueForIdentifier();
+        verify(partyMapper, times(1)).nextValueForIdentifier();
     }
 
     @Test
     public void noCreateUserBecauseGetHttp401UnauthorizedError() throws Exception {
         //setup
-        when(partyMapper.nexValueForIdentifier()).thenReturn(1L);
+        when(partyMapper.nextValueForIdentifier()).thenReturn(1L);
         when(partyMapper.saveParty(any())).thenReturn(1);
         when(partyMapper.saveUserLogin(any())).thenReturn(1);
         when(partyMapper.saveUserRole(any())).thenReturn(1);
@@ -172,7 +172,7 @@ public class UserCmdApiTest {
                 .andExpect(jsonPath("$.errors[0].detail").value("Bad credentials"));
 
         // verify
-        verify(partyMapper, times(1)).nexValueForIdentifier();
+        verify(partyMapper, times(1)).nextValueForIdentifier();
         verify(partyMapper, times(1)).saveParty(any());
         verify(partyMapper, times(1)).saveUserLogin(any());
         // save 2 roles for default

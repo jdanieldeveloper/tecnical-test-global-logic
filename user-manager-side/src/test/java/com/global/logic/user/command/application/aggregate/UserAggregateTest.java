@@ -11,7 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.UUID;
+
 import static com.global.logic.user.command.infrastructure.fixture.UserCmdFixture.getCreateUserCmd;
+import static com.global.logic.user.command.infrastructure.fixture.UserCmdFixture.getCreateUserCmdWithNullEmailNullPasswordAndInvalidUuid;
 import static com.global.logic.user.command.infrastructure.fixture.UserFixture.getUserWithAllFieldsToAdd;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,7 +39,7 @@ public class UserAggregateTest {
     @Test
     public void userStoreOk(){
         when(userRepository.getUserId()).thenReturn(Either.right(new UserId(1L)));
-        when(userRepository.getUserUuid()).thenReturn(Either.right(new UserUuid("1-2-3-4-5-6")));
+        when(userRepository.getUserUuid()).thenReturn(Either.right(new UserUuid(UUID.randomUUID().toString())));
         when(userRepository.addUser(any(User.class))).thenReturn(Either.right(getUserWithAllFieldsToAdd()));
 
 
@@ -50,7 +53,7 @@ public class UserAggregateTest {
     public void userStoreNoOkBecauseDataBaseProblemWithGenerateUserId(){
         when(userRepository.getUserId())
                 .thenReturn(Either.left(new DatabaseException("There is problem with Database")));
-        when(userRepository.getUserUuid()).thenReturn(Either.right(new UserUuid("1-2-3-4-5-6")));
+        when(userRepository.getUserUuid()).thenReturn(Either.right(new UserUuid(UUID.randomUUID().toString())));
         when(userRepository.addUser(any(User.class))).thenReturn(Either.right(getUserWithAllFieldsToAdd()));
 
 
@@ -76,24 +79,21 @@ public class UserAggregateTest {
         assertEquals("There is problem with Database", exception.getMessage());
     }
 
-    /*@Test
+    @Test
     public void userStoreNoOkBecauseThereIsDomainErrors(){
         when(userRepository.getUserId()).thenReturn(Either.right(new UserId(1L)));
         when(userRepository.getUserUuid()).thenReturn(Either.right(new UserUuid("1-2-3-4-5-6")));
-        //when(userRepository.addUser(any(User.class))).thenReturn(Either.right(getUserWithUserPasswordNullAndInvalidEmail()));
 
-
-        CreateUserCommand createUserCmd = userAggregate.handle(getCreateUserCmdWithFailEmailAndNullPassword());
+        CreateUserCmd createUserCmd = userAggregate.handle(getCreateUserCmdWithNullEmailNullPasswordAndInvalidUuid());
 
         assertTrue(createUserCmd.hasErrors());
-        //DatabaseException exception = (DatabaseException) createUserCmd.getErrors().stream().findFirst().get();
-        //assertEquals("There is problem with Database", exception.getMessage());
-    }*/
+        assertEquals(3, createUserCmd.getErrors().size());
+    }
 
     @Test
     public void userStoreNoOkBecauseDataBaseProblemWithAddUser(){
         when(userRepository.getUserId()).thenReturn(Either.right(new UserId(1L)));
-        when(userRepository.getUserUuid()).thenReturn(Either.right(new UserUuid("1-2-3-4-5-6")));
+        when(userRepository.getUserUuid()).thenReturn(Either.right(new UserUuid(UUID.randomUUID().toString())));
         when(userRepository.addUser(any(User.class)))
                 .thenReturn(Either.left(new DatabaseException("There is problem with Database")));
 

@@ -1,6 +1,7 @@
 package com.global.logic.user.command.infrastructure.persistence.dao.impl;
 
 import com.global.logic.user.command.infrastructure.dto.PartyDto;
+import com.global.logic.user.command.infrastructure.dto.UserPhoneDto;
 import com.global.logic.user.command.infrastructure.dto.UserRoleDto;
 import com.global.logic.user.command.infrastructure.enums.UserStatusEnum;
 import com.global.logic.user.command.infrastructure.enums.UserTypeEnum;
@@ -33,10 +34,10 @@ public class PartyDaoImpl implements PartyDao {
 
 
     @Override
-    public Long nexValueForIdentifier() {
+    public Long nextValueForIdentifier() {
         long partyId = 0;
         try {
-            partyId = partyMapper.nexValueForIdentifier();
+            partyId = partyMapper.nextValueForIdentifier();
             if (partyId > 0) {
                 log.info("PartyId identifier was created correctly!!!");
 
@@ -50,6 +51,26 @@ public class PartyDaoImpl implements PartyDao {
             throw new DatabaseException(e.getMessage(), e);
         }
         return partyId;
+    }
+
+    @Override
+    public Long nextValueForContact() {
+        long contactMechId = 0;
+        try {
+            contactMechId = partyMapper.nextValueForContact();
+            if (contactMechId > 0) {
+                log.info("ContactMechId identifier was created correctly!!!");
+
+            } else {
+                // defensing programming
+                throw new IllegalStateException("Error contactMechId can be larger than of 0!!!");
+            }
+        } catch (Exception e) {
+            log.error("Error while created contactMechId!!!", e);
+            //
+            throw new DatabaseException(e.getMessage(), e);
+        }
+        return contactMechId;
     }
 
     @Override
@@ -148,6 +169,46 @@ public class PartyDaoImpl implements PartyDao {
     }
 
     @Override
+    public UserPhoneDto saveUserContact(UserPhoneDto userPhoneDto) {
+        int rowAffected;
+        try {
+            rowAffected = partyMapper.saveUserContact(userPhoneDto);
+            if (rowAffected == 1) {
+                log.info("Contact associated to user was created correctly!!!");
+
+            } else {
+                // defensing programming
+                throw new IllegalStateException("Error row affected more than 1 when user contact was created!!!");
+            }
+        } catch (Exception e) {
+            log.error("Error while created user contact!!!", e);
+            //
+            throw new DatabaseException(e.getMessage(), e);
+        }
+        return userPhoneDto;
+    }
+
+    @Override
+    public UserPhoneDto saveUserPhone(UserPhoneDto userPhoneDto) {
+        int rowAffected;
+        try {
+            rowAffected = partyMapper.saveUserPhone(userPhoneDto);
+            if (rowAffected == 1) {
+                log.info("Phone associated to user was created correctly!!!");
+
+            } else {
+                // defensing programming
+                throw new IllegalStateException("Error row affected more than 1 when user phone was created!!!");
+            }
+        } catch (Exception e) {
+            log.error("Error while created user phone!!!", e);
+            //
+            throw new DatabaseException(e.getMessage(), e);
+        }
+        return userPhoneDto;
+    }
+
+    @Override
     public PartyDto findPartyByUserLoginId(String userLoginId) {
         PartyDto partyDto;
         try {
@@ -190,5 +251,26 @@ public class PartyDaoImpl implements PartyDao {
             throw new DatabaseException(e.getMessage(), e);
         }
         return userRoleDtos;
+    }
+
+    @Override
+    public List<UserPhoneDto> findPhoneByUserLoginId(String userLoginId) {
+        List<UserPhoneDto> userPhoneDtos;
+        try {
+            userPhoneDtos = partyMapper.findPhoneByUserLoginId(userLoginId);
+            if (Objects.nonNull(userPhoneDtos) && !userPhoneDtos.isEmpty()) {
+                log.info("The phones by user login was found!!!");
+            } else {
+                log.info("The phones by user login wasn't found!!!");
+
+                userPhoneDtos = new ArrayList<>();
+            }
+
+        } catch (Exception e) {
+            log.error("Error while find phones by user login!!!", e);
+            //
+            throw new DatabaseException(e.getMessage(), e);
+        }
+        return userPhoneDtos;
     }
 }

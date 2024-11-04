@@ -42,10 +42,10 @@ public class ResponseFactoryTest {
     }
 
     @Test
-    public void createResponseHttp409ConflictErrorWhenIsDomainException(){
+    public void createResponseHttp400BadRequestErrorWhenIsDomainException(){
         ResponseEntity<?> response = ResponseFactory.createError(
                 DomainException.class, List.of(new DomainException("There is Domain problem")));
-        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
         ErrorModelResp errorModelResp = (ErrorModelResp) response.getBody();
         assertNotNull(errorModelResp.getCustomErrors());

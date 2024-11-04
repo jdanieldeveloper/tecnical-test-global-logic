@@ -1,26 +1,28 @@
 package com.global.logic.user.command.domain.user;
 
-import org.junit.jupiter.api.BeforeAll;
+import com.global.logic.user.command.infrastructure.config.UserManagerTestConfig;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
 import javax.validation.Validator;
 
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
+@SpringBootTest
+@ContextConfiguration(classes = { UserManagerTestConfig.class})
 public class PasswordTest {
 
-    private static Validator validator;
-
-    @BeforeAll
-    public static void setUp() {
-        validator = Validation.buildDefaultValidatorFactory().getValidator();
-    }
+    @Autowired
+    private Validator validator;
 
     @Test
     void passwordFormatIsValid() {
@@ -30,9 +32,22 @@ public class PasswordTest {
         assertTrue(violations.isEmpty());
     }
 
+
+    @Test
+    void passwordFormatIsInvalidBecauseIsNullField() {
+        Password password = new Password(null);
+        Set<ConstraintViolation<Password>> violations = validator.validate(password);
+        assertFalse(violations.isEmpty());
+
+        Optional<String> message =
+                violations.stream().map(ConstraintViolation::getMessage).findFirst();
+        assertTrue(message.isPresent());
+        assertEquals(message.get(), "The user password can't be null");
+    }
+
     @Test
     void passwordFormatConsecutiveNumbersIsValid() {
-        Password password = new Password("m1Passw2rd");
+        Password password = new Password("m12Passwrd");
         Set<ConstraintViolation<Password>> violations = validator.validate(password);
 
         assertTrue(violations.isEmpty());

@@ -2,12 +2,12 @@ package com.global.logic.user.command.domain.user;
 
 import lombok.Value;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Value
 public class Type {
 
-    @NotBlank(message = "The typeId mustn't be a empty value")
+    @NotNull(message = "{user.type.notnull}")
     private final String typeId;
 
 }

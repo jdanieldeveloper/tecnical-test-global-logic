@@ -1,10 +1,12 @@
 package com.global.logic.user.command.domain.user;
 
-import org.junit.jupiter.api.BeforeAll;
+import com.global.logic.user.command.infrastructure.config.UserManagerTestConfig;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.Optional;
 import java.util.Set;
@@ -15,14 +17,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
+
+@SpringBootTest
+@ContextConfiguration(classes = { UserManagerTestConfig.class})
 public class UserTest {
 
-    private static Validator validator;
+    @Autowired
+    private Validator validator;
 
-    @BeforeAll
-    public static void setUp() {
-        validator = Validation.buildDefaultValidatorFactory().getValidator();
-    }
 
     @Test
     void userIsValid() {

@@ -26,9 +26,8 @@ public class UserManagerTestConfig {
                 //.H2
                 .setName("testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false")
                 // not change data because a lot of problems with integration test
-                //.addScript("db/h2/sql/create-schema-hsqldb.sql")
-                //.addScript("db/h2/sql/data-hsqldb.sql")
+                .addScript("db/h2/sql/schema-hsqldb.sql")
+                .addScript("db/h2/sql/data-hsqldb.sql")
                 .build();
     }
-
 }

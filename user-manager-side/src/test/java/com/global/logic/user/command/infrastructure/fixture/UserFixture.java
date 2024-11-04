@@ -29,7 +29,7 @@ public class UserFixture {
         // email
         Email email = new Email("dcarvajal3@gmail.com");
         // password
-        Password password = new Password("123456789");
+        Password password = new Password("m1Passw2rd");
 
         // roles can be optional but in this case assign by default
         Role read = new Role(RoleEnum.VISITOR_READ.getRoleId(), RoleEnum.VISITOR_READ.getDescription());
@@ -55,7 +55,7 @@ public class UserFixture {
         // email
         Email email = new Email("dcarvajal3@gmail.com");
         // password
-        Password password = new Password("123456789");
+        Password password = new Password("m1Passw2rd");
 
         // roles can be optional but in this case assign by default
         Role read = new Role(RoleEnum.VISITOR_READ.getRoleId(), RoleEnum.VISITOR_READ.getDescription());
@@ -81,7 +81,7 @@ public class UserFixture {
         // email
         Email email = new Email("dcarvajal3@gmail.com");
         // password
-        Password password = new Password("123456789");
+        Password password = new Password("m1Passw2rd");
 
         // roles can be optional but in this case assign by default
         Role read = new Role(RoleEnum.VISITOR_READ.getRoleId(), RoleEnum.VISITOR_READ.getDescription());
@@ -109,7 +109,7 @@ public class UserFixture {
         // email
         Email email = new Email("dcarvajal3@gmail.com");
         // password
-        Password password = new Password("123456789");
+        Password password = new Password("m1Passw2rd");
 
         // roles can be optional but in this case assign by default
         Role read = new Role(RoleEnum.VISITOR_READ.getRoleId(), RoleEnum.VISITOR_READ.getDescription());
@@ -135,7 +135,7 @@ public class UserFixture {
         // email
         Email email = null;
         // password
-        Password password = new Password("123456789");
+        Password password = new Password("m1Passw2rd");
 
         // roles can be optional but in this case assign by default
         Role read = new Role(RoleEnum.VISITOR_READ.getRoleId(), RoleEnum.VISITOR_READ.getDescription());

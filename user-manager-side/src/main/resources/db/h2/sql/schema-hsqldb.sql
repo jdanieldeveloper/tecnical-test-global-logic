@@ -99,8 +99,8 @@ CREATE SEQUENCE PARTY_ID_SEQ;
 CREATE TABLE  TELECOM_NUMBER (
 				TELECOM_NUMBER_ID BIGINT NOT NULL,
 				COUNTRY_CODE VARCHAR(2),
-				CITY_CODE INTEGER,
-				CONTACT_NUMBER VARCHAR(20),
+				CITY_CODE SMALLINT,
+				CONTACT_NUMBER BIGINT,
 	CONSTRAINT TELECOM_NUMBER_PK PRIMARY KEY (TELECOM_NUMBER_ID));
 
 -------------------------------------------------------------------------------------------------------------------
@@ -118,3 +118,8 @@ CREATE TABLE  CONTACT_MECH (
 			   REFERENCES TELECOM_NUMBER(TELECOM_NUMBER_ID),
 	CONSTRAINT PARTY_CONTACT_MECH_FK FOREIGN KEY (PARTY_ID)
     		   REFERENCES PARTY(PARTY_ID));
+
+-------------------------------------------------------------------------------------------------------------------
+--  SEQUENCE FOR TABLE PARTY
+-------------------------------------------------------------------------------------------------------------------
+CREATE SEQUENCE CONTACT_MECH_SEQ;

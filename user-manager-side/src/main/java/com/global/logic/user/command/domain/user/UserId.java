@@ -4,13 +4,15 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
 public class UserId extends Identifier {
 
-    @Min(value = 1, message = "The userId must be a correlative number")
-    private final long value;
+    @NotNull(message = "{user.identifier.notnull}")
+    @Min(value = 1, message = "{user.identifier.format}")
+    private final Long value;
 
 
 }

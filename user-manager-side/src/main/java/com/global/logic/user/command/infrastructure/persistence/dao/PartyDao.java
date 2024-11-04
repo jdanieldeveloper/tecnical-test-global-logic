@@ -1,7 +1,9 @@
 package com.global.logic.user.command.infrastructure.persistence.dao;
 
 import com.global.logic.user.command.infrastructure.dto.PartyDto;
+import com.global.logic.user.command.infrastructure.dto.UserPhoneDto;
 import com.global.logic.user.command.infrastructure.dto.UserRoleDto;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,7 +14,9 @@ import java.util.List;
  */
 public interface PartyDao extends Dao {
 
-    Long nexValueForIdentifier();
+    Long nextValueForIdentifier();
+
+    Long nextValueForContact();
 
     PartyDto saveParty(PartyDto partyDto);
 
@@ -22,7 +26,15 @@ public interface PartyDao extends Dao {
 
     PartyDto saveUserWithRoles(PartyDto partyDto);
 
+    UserPhoneDto saveUserContact(UserPhoneDto userPhoneDto);
+
+    UserPhoneDto saveUserPhone(UserPhoneDto userPhoneDto);
+
     PartyDto findPartyByUserLoginId(String userLoginId);
 
     List<UserRoleDto> findRoleByUserLoginId(String userLoginId);
+
+    List<UserPhoneDto> findPhoneByUserLoginId(String userLoginId);
+
+
 }

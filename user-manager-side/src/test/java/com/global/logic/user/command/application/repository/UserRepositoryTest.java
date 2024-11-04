@@ -39,7 +39,7 @@ public class UserRepositoryTest {
 
     @Test
     public void getUserIdOk()  {
-        when(partyDao.nexValueForIdentifier()).thenReturn(1L);
+        when(partyDao.nextValueForIdentifier()).thenReturn(1L);
 
         Either<Throwable, UserId>  userIdGenerated = userRepository.getUserId();
         assertTrue(userIdGenerated.isRight());
@@ -48,7 +48,7 @@ public class UserRepositoryTest {
 
     @Test
     public void getUserIdNotOkBecauseThereIsDatabaseProblems()  {
-        when(partyDao.nexValueForIdentifier())
+        when(partyDao.nextValueForIdentifier())
                 .thenThrow(new DatabaseException("There is problems with database"));
 
         Either<Throwable, UserId>  userIdGenerated = userRepository.getUserId();

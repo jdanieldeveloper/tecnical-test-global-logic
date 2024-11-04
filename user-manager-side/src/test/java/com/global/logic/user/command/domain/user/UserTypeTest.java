@@ -1,11 +1,13 @@
 package com.global.logic.user.command.domain.user;
 
+import com.global.logic.user.command.infrastructure.config.UserManagerTestConfig;
 import com.global.logic.user.command.infrastructure.enums.UserTypeEnum;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.Optional;
 import java.util.Set;
@@ -13,14 +15,12 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 
+@SpringBootTest
+@ContextConfiguration(classes = { UserManagerTestConfig.class})
 public class UserTypeTest {
 
-    private static Validator validator;
-
-    @BeforeAll
-    public static void setUp() {
-        validator = Validation.buildDefaultValidatorFactory().getValidator();
-    }
+    @Autowired
+    private Validator validator;
 
     @Test
     void userTypeIsValid() {
@@ -39,7 +39,7 @@ public class UserTypeTest {
         Optional<String> message =
                 violations.stream().map(ConstraintViolation::getMessage).findFirst();
         assertTrue(message.isPresent());
-        assertEquals(message.get(), "The typeId mustn't be a empty value");
+        assertEquals(message.get(), "The user type can't be null");
     }
 }
 

@@ -43,7 +43,7 @@ public class UserQueryApiITest {
     @Test
     public void createUserAndAfterLoginGetHttp200Ok() throws Exception {
         // setup
-        when(partyMapper.nexValueForIdentifier()).thenReturn(1L);
+        when(partyMapper.nextValueForIdentifier()).thenReturn(1L);
         when(partyMapper.saveParty(any())).thenReturn(1);
         when(partyMapper.saveUserLogin(any())).thenReturn(1);
         when(partyMapper.saveUserRole(any())).thenReturn(1);
@@ -85,7 +85,7 @@ public class UserQueryApiITest {
 
 
         // verify
-        verify(partyMapper, times(1)).nexValueForIdentifier();
+        verify(partyMapper, times(1)).nextValueForIdentifier();
         verify(partyMapper, times(1)).saveParty(any());
         verify(partyMapper, times(1)).saveUserLogin(any());
         // save 2 roles for default
@@ -95,4 +95,6 @@ public class UserQueryApiITest {
         verify(partyMapper, times(3)).findRoleByUserLoginId(any());
 
     }
+
+    //TODO validar el nombre y los fonos cuando son opcionales
 }

@@ -42,30 +42,30 @@ public class PartyDaoTest {
     private PartyDao partyDao;
 
     @Test
-    public void nexValueForIdentifierGenerateOk()  {
-        when(partyMapper.nexValueForIdentifier()).thenReturn(1L);
+    public void nextValueForIdentifierGenerateOk()  {
+        when(partyMapper.nextValueForIdentifier()).thenReturn(1L);
 
-        long identifier = partyDao.nexValueForIdentifier();
+        long identifier = partyDao.nextValueForIdentifier();
         assertTrue(identifier > 0);
     }
 
     @Test
-    public void nexValueForIdentifierNotGenerateBecauseThereIsInconsistency() {
-        when(partyMapper.nexValueForIdentifier()).thenReturn(-1L);
+    public void nextValueForIdentifierNotGenerateBecauseThereIsInconsistency() {
+        when(partyMapper.nextValueForIdentifier()).thenReturn(-1L);
 
         DatabaseException exception =
-                assertThrows(DatabaseException.class, () -> partyDao.nexValueForIdentifier());
+                assertThrows(DatabaseException.class, () -> partyDao.nextValueForIdentifier());
 
         assertEquals(exception.getClass(), DatabaseException.class);
         assertEquals(exception.getMessage(), "Error partyId can be larger than of 0!!!");
     }
 
     @Test
-    public void nexValueForIdentifierNotGenerateBecauseThrowException() {
-        when(partyMapper.nexValueForIdentifier()).thenThrow(new RuntimeException("Error in DataBase!!!"));
+    public void nextValueForIdentifierNotGenerateBecauseThrowException() {
+        when(partyMapper.nextValueForIdentifier()).thenThrow(new RuntimeException("Error in DataBase!!!"));
 
         DatabaseException exception =
-                assertThrows(DatabaseException.class, () -> partyDao.nexValueForIdentifier());
+                assertThrows(DatabaseException.class, () -> partyDao.nextValueForIdentifier());
 
         assertEquals(exception.getClass(), DatabaseException.class);
         assertEquals(exception.getMessage(), "Error in DataBase!!!");
@@ -182,7 +182,7 @@ public class PartyDaoTest {
     @Test
     public void saveUserWithRolesOk()  {
         // setup
-        when(partyMapper.nexValueForIdentifier()).thenReturn(1L);
+        when(partyMapper.nextValueForIdentifier()).thenReturn(1L);
         when(partyMapper.saveParty(any())).thenReturn(1);
         when(partyMapper.saveUserLogin(any())).thenReturn(1);
         when(partyMapper.saveUserRole(any())).thenReturn(1);

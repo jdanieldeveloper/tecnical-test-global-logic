@@ -1,7 +1,11 @@
 package com.global.logic.user.command.domain.user;
 
+import com.global.logic.user.command.infrastructure.config.UserManagerTestConfig;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -14,15 +18,14 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class
-UserIdentifierTest {
 
-    private static Validator validator;
+@SpringBootTest
+@ContextConfiguration(classes = { UserManagerTestConfig.class})
+public class UserIdentifierTest {
 
-    @BeforeAll
-    public static void setUp() {
-        validator = Validation.buildDefaultValidatorFactory().getValidator();
-    }
+    @Autowired
+    private Validator validator;
+
 
     @Test
     void userIdSequenceIsValid() {
@@ -30,6 +33,18 @@ UserIdentifierTest {
         Set<ConstraintViolation<UserId>> violations = validator.validate(userId);
 
         assertTrue(violations.isEmpty());
+    }
+
+    @Test
+    void userIdSequenceIsNotValidBecauseIsNull() {
+        UserId userId = new UserId(null);
+        Set<ConstraintViolation<UserId>> violations = validator.validate(userId);
+        assertFalse(violations.isEmpty());
+
+        Optional<String> message =
+                violations.stream().map(ConstraintViolation::getMessage).findFirst();
+        assertTrue(message.isPresent());
+        assertEquals(message.get(), "The user Identifier can't be null");
     }
 
     @Test

@@ -11,15 +11,15 @@ public class UserCmdFixture {
         return CreateUserCmd.builder()
                 .name("Daniel Carvajal")
                 .email("dcarvajal3@gmail.com")
-                .password("123456789")
+                .password("m1Passw2rd")
                 .phones(Set.of(new Phone("56", 9, 12345678L)))
                 .build();
     }
 
-    public static CreateUserCmd getCreateUserCmdWithFailEmailAndNullPassword() {
+    public static CreateUserCmd getCreateUserCmdWithNullEmailNullPasswordAndInvalidUuid() {
         return CreateUserCmd.builder()
                 .name("Daniel Carvajal")
-                .email("dcarvajal3@g")
+                .email(null)
                 .password(null) // fail pass
                 .phones(Set.of(new Phone("56", 9, 12345678L)))
                 .build();

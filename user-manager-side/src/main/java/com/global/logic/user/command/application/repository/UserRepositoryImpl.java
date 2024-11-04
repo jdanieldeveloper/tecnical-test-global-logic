@@ -10,7 +10,6 @@ import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -27,7 +26,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Either<Throwable, UserId> getUserId() {
-        return Try.of(() -> new UserId(partyDao.nexValueForIdentifier())).toEither();
+        return Try.of(() -> new UserId(partyDao.nextValueForIdentifier())).toEither();
     }
 
     @Override
