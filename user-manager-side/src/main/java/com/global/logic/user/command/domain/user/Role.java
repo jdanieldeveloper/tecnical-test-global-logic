@@ -11,6 +11,7 @@ public class Role implements Comparable<String> {
 
     @Override
     public int compareTo(String o) {
+        //TODO to be define
         return 0;
     }
 }

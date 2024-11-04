@@ -7,6 +7,7 @@ import com.global.logic.user.command.infrastructure.enums.UserTypeEnum;
 import com.global.logic.user.command.infrastructure.exception.DatabaseException;
 import com.global.logic.user.command.infrastructure.persistence.dao.PartyDao;
 import com.global.logic.user.command.infrastructure.persistence.mybatis.mapper.PartyMapper;
+import com.global.logic.user.query.infraestructure.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -160,12 +161,12 @@ public class PartyDaoImpl implements PartyDao {
             } else {
                 log.info("The party by user login wasn't found!!!");
                 //
-                throw new DatabaseException("The party by user login wasn't found!!!");
+                throw new UserNotFoundException("The party by user login wasn't found!!!");
             }
         } catch (Exception e) {
             log.error("Error while find party by user login!!!", e);
             //
-            throw new DatabaseException(e.getMessage(), e);
+            throw new UserNotFoundException(e.getMessage(), e);
         }
         return partyDto;
     }
@@ -189,28 +190,5 @@ public class PartyDaoImpl implements PartyDao {
             throw new DatabaseException(e.getMessage(), e);
         }
         return userRoleDtos;
-    }
-
-    @Override
-    public PartyDto findPartyByUuid(String userUuid) {
-        PartyDto partyDto;
-        try {
-            partyDto = partyMapper.findPartyByUuid(userUuid);
-            if (Objects.nonNull(partyDto)) {
-                List<UserRoleDto> userRolesDtos = findRoleByUserLoginId(partyDto.getUserLoginId());
-                partyDto.setUserRolesDtos(userRolesDtos);
-                //
-                log.info("The party by user uuid was found!!!");
-            } else {
-                log.info("The party by user uuid wasn't found!!!");
-                //
-                throw new DatabaseException("The party by user uuid wasn't found!!!");
-            }
-        } catch (Exception e) {
-            log.error("Error while find party by user uuid!!!", e);
-            //
-            throw new DatabaseException(e.getMessage(), e);
-        }
-        return partyDto;
     }
 }

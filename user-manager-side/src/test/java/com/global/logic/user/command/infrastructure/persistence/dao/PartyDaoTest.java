@@ -5,17 +5,26 @@ import com.global.logic.user.command.infrastructure.dto.PartyDto;
 import com.global.logic.user.command.infrastructure.dto.UserRoleDto;
 import com.global.logic.user.command.infrastructure.exception.DatabaseException;
 import com.global.logic.user.command.infrastructure.persistence.mybatis.mapper.PartyMapper;
+import com.global.logic.user.query.infraestructure.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ContextConfiguration;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
+import static com.global.logic.user.command.infrastructure.fixture.PartyFixture.getPartyDtoWithAllFieldsSavedWithPassEncrypted;
+import static com.global.logic.user.command.infrastructure.fixture.PartyFixture.getPartyDtoWithAllFieldsToSave;
+import static com.global.logic.user.command.infrastructure.fixture.PartyFixture.getPartyDtoWithOutRoles;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static com.global.logic.user.command.infrastructure.fixture.UserRoleFixture.getUserRoleDtoWithVisitorCreateRole;
-import static com.global.logic.user.command.infrastructure.fixture.PartyFixture.getPartyDtoWithAllFieldsToSave;
 
 
 /**
@@ -29,7 +38,7 @@ public class PartyDaoTest {
     @MockBean
     private PartyMapper partyMapper;
 
-    @SpyBean
+    @Autowired
     private PartyDao partyDao;
 
     @Test
@@ -168,5 +177,81 @@ public class PartyDaoTest {
 
         assertEquals(exception.getClass(), DatabaseException.class);
         assertEquals(exception.getMessage(), "Error in DataBase!!!");
+    }
+
+    @Test
+    public void saveUserWithRolesOk()  {
+        // setup
+        when(partyMapper.nexValueForIdentifier()).thenReturn(1L);
+        when(partyMapper.saveParty(any())).thenReturn(1);
+        when(partyMapper.saveUserLogin(any())).thenReturn(1);
+        when(partyMapper.saveUserRole(any())).thenReturn(1);
+
+        PartyDto partyDto = getPartyDtoWithAllFieldsToSave();
+
+        PartyDto partySaved = partyDao.saveUserWithRoles(partyDto);
+        assertNotNull(partySaved);
+    }
+
+    @Test
+    public void findPartyByUserLoginIdOk()  {
+        PartyDto partySaved = getPartyDtoWithAllFieldsSavedWithPassEncrypted();
+        // setup
+        when(partyMapper.findPartyByUserLoginId(any())).thenReturn(partySaved);
+
+        PartyDto partyFound = partyDao.findPartyByUserLoginId(partySaved.getUserLoginId());
+
+        assertEquals(partySaved.getUserLoginId(), partyFound.getUserLoginId());
+        assertEquals(partySaved.getPartyId(), partyFound.getPartyId());
+        assertEquals(partySaved.getPartyUuid(), partyFound.getPartyUuid());
+    }
+
+    @Test
+    public void findPartyByUserLoginIdNOkBecauseUserNotFound()  {
+        PartyDto partySaved = getPartyDtoWithAllFieldsSavedWithPassEncrypted();
+        // setup
+        when(partyMapper.findPartyByUserLoginId(any())).thenReturn(null);
+
+        UserNotFoundException exception =
+                assertThrows(UserNotFoundException.class, () -> partyDao.findPartyByUserLoginId(partySaved.getUserLoginId()));
+
+        assertEquals(exception.getClass(), UserNotFoundException.class);
+        assertEquals(exception.getMessage(), "The party by user login wasn't found!!!");
+    }
+
+    @Test
+    public void findRoleByUserLoginIdOk()  {
+        PartyDto partySaved = getPartyDtoWithAllFieldsSavedWithPassEncrypted();
+        // setup
+        when(partyMapper.findRoleByUserLoginId(any())).thenReturn(partySaved.getUserRolesDtos());
+
+        List<UserRoleDto> userRolesFound = partyDao.findRoleByUserLoginId(partySaved.getUserLoginId());
+
+        assertFalse(userRolesFound.isEmpty());
+        assertEquals(2, userRolesFound.size());
+    }
+
+    @Test
+    public void findRoleByUserLoginIdNOkBecauseRolesNotFound()  {
+        PartyDto partySaved = getPartyDtoWithOutRoles();
+        // setup
+        when(partyMapper.findRoleByUserLoginId(any())).thenReturn(partySaved.getUserRolesDtos());
+
+        List<UserRoleDto> userRolesFound = partyDao.findRoleByUserLoginId(partySaved.getUserLoginId());
+
+        assertTrue(userRolesFound.isEmpty());
+    }
+
+    @Test
+    public void findRoleByUserLoginIdNOkBecauseExceptionWhenFindRoles()  {
+        PartyDto partySaved = getPartyDtoWithAllFieldsSavedWithPassEncrypted();
+        // setup
+        when(partyMapper.findRoleByUserLoginId(any())).thenThrow(new RuntimeException("Problem to find roles"));
+
+        DatabaseException exception =
+                assertThrows(DatabaseException.class, () -> partyDao.findRoleByUserLoginId(partySaved.getUserLoginId()));
+
+        assertEquals(exception.getClass(), DatabaseException.class);
+        assertEquals(exception.getMessage(), "Problem to find roles");
     }
 }

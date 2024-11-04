@@ -6,9 +6,9 @@ import com.global.logic.user.command.infrastructure.config.UserManagerTestConfig
 import com.global.logic.user.command.infrastructure.exception.DatabaseException;
 import io.vavr.control.Either;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ContextConfiguration;
 
 import static com.global.logic.user.command.infrastructure.fixture.UserCmdFixture.getCreateUserCmd;
@@ -30,7 +30,7 @@ public class UserAggregateTest {
     @MockBean
     private UserRepository userRepository;
 
-    @SpyBean
+    @Autowired
     private UserAggregate userAggregate;
 
     @Test

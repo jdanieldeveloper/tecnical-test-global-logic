@@ -18,10 +18,6 @@ public class UserQueryGateway {
         return userQueryService.getUserByUserLoginId(userLoginId);
     }
 
-    public Either<UserNotFoundException, PartyDto> getUserByUuid(String uuid) {
-        return userQueryService.getUserByUuid(uuid);
-    }
-
     public Either<UserAuthenticationException, String> createAuthenticationToken(String userLoginId, String password) {
         return userQueryService.createAuthenticationToken(userLoginId, password);
     }

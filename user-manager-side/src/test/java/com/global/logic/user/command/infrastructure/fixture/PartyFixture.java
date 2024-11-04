@@ -25,11 +25,12 @@ public class PartyFixture {
                 //
                 .createdDate(LocalDateTime.now())
                 .createByUserLogin("dcarvajal3@gmail.com")
+                .lastLoginDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
                 .lastModifiedByUserLogin("dcarvajal3@gmail.com")
                 //
                 .userLoginId("dcarvajal3@gmail.com")
-                .currentPassword("123456789")
+                .currentPassword("m1Passw2rd")
                 //
                 .userRolesDtos(List.of(
                         getUserRoleDtoWithVisitorCreateRole(),
@@ -48,15 +49,59 @@ public class PartyFixture {
                 //
                 .createdDate(LocalDateTime.now())
                 .createByUserLogin("dcarvajal3@gmail.com")
+                .lastLoginDate(LocalDateTime.now())
                 .lastModifiedDate(LocalDateTime.now())
                 .lastModifiedByUserLogin("dcarvajal3@gmail.com")
                 //
                 .userLoginId("dcarvajal3@gmail.com")
-                .currentPassword(new BCryptPasswordEncoder().encode("123456789"))
+                .currentPassword(new BCryptPasswordEncoder().encode("m1Passw2rd"))
                 //
                 .userRolesDtos(List.of(
                         getUserRoleDtoWithVisitorCreateRole(),
                         getUserRoleDtoWithVisitorUpdateRole()))
+                .build();
+    }
+
+    public static PartyDto getPartyDtoWithAllFieldsSavedWithDiferentPassEncrypted() {
+        return PartyDto.builder()
+                .partyId(1L)
+                .partyUuid(UUID.randomUUID().toString())
+                .partyType(UserTypeEnum.VISITOR.getTypeId())
+                .partyName("Daniel Carvajal")
+                .description("Description Mock")
+                .statusId(UserStatusEnum.ENABLED.getStatusId())
+                //
+                .createdDate(LocalDateTime.now())
+                .createByUserLogin("dcarvajal3@gmail.com")
+                .lastLoginDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .lastModifiedByUserLogin("dcarvajal3@gmail.com")
+                //
+                .userLoginId("dcarvajal3@gmail.com")
+                .currentPassword(new BCryptPasswordEncoder().encode("mockfailpass:-("))
+                //
+                .userRolesDtos(List.of(
+                        getUserRoleDtoWithVisitorCreateRole(),
+                        getUserRoleDtoWithVisitorUpdateRole()))
+                .build();
+    }
+
+    public static PartyDto getPartyDtoWithOutRoles() {
+        return PartyDto.builder()
+                .partyId(1L)
+                .partyUuid(UUID.randomUUID().toString())
+                .partyType(UserTypeEnum.VISITOR.getTypeId())
+                .partyName("Daniel Carvajal")
+                .description("Description Mock")
+                .statusId(UserStatusEnum.ENABLED.getStatusId())
+                //
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(LocalDateTime.now())
+                .lastLoginDate(LocalDateTime.now())
+                .lastModifiedByUserLogin("dcarvajal3@gmail.com")
+                //
+                .userLoginId("dcarvajal3@gmail.com")
+                .currentPassword(new BCryptPasswordEncoder().encode("m1Passw2rd"))
                 .build();
     }
 }

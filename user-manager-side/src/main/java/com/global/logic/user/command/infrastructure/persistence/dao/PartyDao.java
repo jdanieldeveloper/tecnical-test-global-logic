@@ -25,8 +25,4 @@ public interface PartyDao extends Dao {
     PartyDto findPartyByUserLoginId(String userLoginId);
 
     List<UserRoleDto> findRoleByUserLoginId(String userLoginId);
-
-    PartyDto findPartyByUuid(String uuid);
-
-
 }

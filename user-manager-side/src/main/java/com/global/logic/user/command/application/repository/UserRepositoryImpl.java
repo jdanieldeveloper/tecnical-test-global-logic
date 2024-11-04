@@ -9,6 +9,7 @@ import io.vavr.control.Either;
 import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -18,7 +19,7 @@ import static com.global.logic.user.command.infrastructure.converter.UserConvert
 import static com.global.logic.user.command.infrastructure.converter.UserConverter.userToPartyDto;
 
 @Slf4j
-@Repository
+@Component
 @AllArgsConstructor // DI by constructor
 public class UserRepositoryImpl implements UserRepository {
 

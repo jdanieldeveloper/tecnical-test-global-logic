@@ -21,7 +21,5 @@ public interface PartyMapper {
 	PartyDto findPartyByUserLoginId(@Param("userLoginId") String userLoginId);
 
 	List<UserRoleDto> findRoleByUserLoginId(@Param("userLoginId") String userLoginId);
-
-	PartyDto findPartyByUuid(@Param("partyUuid") String partyUuid);
 	
 }

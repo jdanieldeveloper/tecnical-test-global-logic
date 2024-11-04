@@ -12,7 +12,25 @@ public class UserModelFixture {
         return CreateUserReq.builder()
                 .name("Daniel Carvajal")
                 .email("dcarvajal3@gmail.com")
-                .password("123456789")
+                .password("m1Passw2rd")
+                .phones(Set.of(new Phone("56", 9, 12345678L)))
+                .build();
+    }
+
+    public static CreateUserReq getCreateUserReqBadRequestEmailInvalid() {
+        return CreateUserReq.builder()
+                .name("Daniel Carvajal")
+                .email("dcarva") // without domain
+                .password("m1Passw2rd")
+                .phones(Set.of(new Phone("56", 9, 12345678L)))
+                .build();
+    }
+
+    public static CreateUserReq getCreateUserReqBadRequestPasswordInvalid() {
+        return CreateUserReq.builder()
+                .name("Daniel Carvajal")
+                .email("dcarvajal3@gmail.com")
+                .password("123456789101112") // larger than 12 and format incorrectly
                 .phones(Set.of(new Phone("56", 9, 12345678L)))
                 .build();
     }
@@ -20,7 +38,7 @@ public class UserModelFixture {
     public static LoginModelReq loginUserReqWillAllOkFields() {
         return LoginModelReq.builder()
                 .email("dcarvajal3@gmail.com")
-                .password("123456789")
+                .password("m1Passw2rd")
                 .build();
     }
 }

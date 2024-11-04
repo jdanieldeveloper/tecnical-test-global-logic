@@ -29,7 +29,7 @@ public class ResponseFactory {
                 Case($(clazz -> clazz.equals(BusinessException.class)),
                         response -> getHttp409ConflictStatusErrors(errors)),
                 Case($(clazz -> clazz.equals(DomainException.class)),
-                        response -> getHttp409ConflictStatusErrors(errors)),
+                        response -> getHttp400BadRequestStatusErrors(errors)),
                 Case($(clazz -> clazz.equals(DatabaseException.class)),
                         response -> getHttp500InternalServerStatusErrors(errors)),
                 Case($(clazz -> clazz.equals(UserNotFoundException.class)),
@@ -44,6 +44,13 @@ public class ResponseFactory {
     private static ResponseEntity<?> getHttp409ConflictStatusErrors(List<Throwable> errors) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
+                //.headers()
+                .body(createCustomError(errors));
+    }
+
+    private static ResponseEntity<?> getHttp400BadRequestStatusErrors(List<Throwable> errors) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 //.headers()
                 .body(createCustomError(errors));
     }

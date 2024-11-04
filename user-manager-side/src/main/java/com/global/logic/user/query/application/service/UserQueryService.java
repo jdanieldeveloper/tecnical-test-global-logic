@@ -35,17 +35,6 @@ public class UserQueryService {
         }
     }
 
-    public Either<UserNotFoundException, PartyDto> getUserByUuid(String uuid) {
-        Try<PartyDto> foundPartyDto = Try.of(() -> partyDao.findPartyByUuid(uuid));
-        if (foundPartyDto.isSuccess()) {
-            return Either.right(foundPartyDto.get());
-        } else {
-            return Either.left(
-                    new UserNotFoundException(foundPartyDto.getCause().getMessage(), foundPartyDto.getCause()));
-        }
-    }
-
-
     public Either<UserAuthenticationException, String> createAuthenticationToken(String userLoginId, String password) {
         // auth user
         Try<Authentication> authenticate = Try.of(() ->

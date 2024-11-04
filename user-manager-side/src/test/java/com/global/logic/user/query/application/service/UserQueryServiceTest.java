@@ -1,28 +1,27 @@
-package com.global.logic.user.query.infraestructure.service;
+package com.global.logic.user.query.application.service;
 
 import com.global.logic.user.command.infrastructure.config.UserManagerTestConfig;
 import com.global.logic.user.command.infrastructure.config.WebSecurityConfig;
 import com.global.logic.user.command.infrastructure.dto.PartyDto;
 import com.global.logic.user.command.infrastructure.persistence.dao.PartyDao;
-import com.global.logic.user.query.application.service.UserQueryService;
 import com.global.logic.user.query.infraestructure.exception.UserAuthenticationException;
 import com.global.logic.user.query.infraestructure.exception.UserNotFoundException;
 import com.global.logic.user.query.infraestructure.util.UtilJwtToken;
 import io.vavr.control.Either;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.global.logic.user.command.infrastructure.fixture.PartyFixture.getPartyDtoWithAllFieldsSavedWithPassEncrypted;
 import static com.global.logic.user.command.infrastructure.fixture.PartyFixture.getPartyDtoWithAllFieldsToSave;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 
 /**
@@ -32,26 +31,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ContextConfiguration(classes = {UserManagerTestConfig.class, WebSecurityConfig.class})
-@Transactional
-public class UserQueryServiceITest {
+public class UserQueryServiceTest {
 
-    @Autowired
+    @MockBean
     private PartyDao partyDao;
 
     @Autowired
     private UserQueryService userQueryService;
 
-    private static PartyDto partyOriginalDto = getPartyDtoWithAllFieldsToSave();
+    private static final PartyDto partyOriginalDto = getPartyDtoWithAllFieldsToSave();
 
-    private static PartyDto partyToSavedDto = getPartyDtoWithAllFieldsToSave();
+    private static final PartyDto partyToSavedDto = getPartyDtoWithAllFieldsSavedWithPassEncrypted();
 
     @Test
-    @Order(1)
     public void createAuthenticationTokenOk()  {
         // setup
-        partyDao.saveUserWithRoles(partyToSavedDto);
+        when(partyDao.findPartyByUserLoginId(any())).thenReturn(partyToSavedDto);
 
         Either<UserAuthenticationException, String> generatedToken =
                 userQueryService.createAuthenticationToken(partyOriginalDto.getUserLoginId(), partyOriginalDto.getCurrentPassword());
@@ -61,10 +57,9 @@ public class UserQueryServiceITest {
     }
 
     @Test
-    @Order(2)
     public void noCreateAuthenticationTokenBecauseBadCredentials()  {
         // setup
-        partyDao.saveUserWithRoles(partyToSavedDto);
+        when(partyDao.findPartyByUserLoginId(any())).thenReturn(partyToSavedDto);
 
         Either<UserAuthenticationException, String> generatedToken =
                 userQueryService.createAuthenticationToken(partyOriginalDto.getUserLoginId(), "failpass123");
@@ -74,10 +69,9 @@ public class UserQueryServiceITest {
     }
 
     @Test
-    @Order(3)
     public void getUserByUserLoginIdOk()  {
         // setup
-        partyDao.saveUserWithRoles(partyToSavedDto);
+        when(partyDao.findPartyByUserLoginId(any())).thenReturn(partyToSavedDto);
 
         Either<UserNotFoundException, PartyDto> foundPartyDto =
                 userQueryService.getUserByUserLoginId(partyOriginalDto.getUserLoginId());
@@ -87,10 +81,10 @@ public class UserQueryServiceITest {
     }
 
     @Test
-    @Order(4)
     public void getUserByUserLoginIdNoOkBecauseUserNotFound()  {
         // setup
-        partyDao.saveUserWithRoles(partyToSavedDto);
+        when(partyDao.findPartyByUserLoginId(any()))
+                .thenThrow(new UserNotFoundException("The party by user login wasn't found!!!"));
 
         Either<UserNotFoundException, PartyDto> foundPartyDto =
                 userQueryService.getUserByUserLoginId("failMockUserLoginId");
@@ -100,33 +94,6 @@ public class UserQueryServiceITest {
     }
 
     @Test
-    @Order(5)
-    public void getUserByUuidOk()  {
-        // setup
-        partyDao.saveUserWithRoles(partyToSavedDto);
-
-        Either<UserNotFoundException, PartyDto> foundPartyDto =
-                userQueryService.getUserByUuid(partyToSavedDto.getPartyUuid());
-
-        assertTrue(foundPartyDto.isRight());
-        assertNotNull(foundPartyDto.get());
-    }
-
-    @Test
-    @Order(6)
-    public void getUserByUuidNoOkBecauseUserNotFound()  {
-        // setup
-        partyDao.saveUserWithRoles(partyToSavedDto);
-
-        Either<UserNotFoundException, PartyDto> foundPartyDto =
-                userQueryService.getUserByUuid(partyOriginalDto.getPartyUuid());
-
-        assertTrue(foundPartyDto.isLeft());
-        assertEquals("The party by user uuid wasn't found!!!", foundPartyDto.getLeft().getMessage());
-    }
-
-    @Test
-    @Order(7)
     public void validateAuthenticationTokenOk(){
         String token = UtilJwtToken.generateToken(
                 new User(partyOriginalDto.getUserLoginId(), partyOriginalDto.getCurrentPassword(), List.of()));
@@ -140,7 +107,6 @@ public class UserQueryServiceITest {
     }
 
     @Test
-    @Order(8)
     public void validateAuthenticationTokenNoOkBecauseUserAuthException() throws InterruptedException {
         String token = UtilJwtToken.generateToken(
                 new User(partyOriginalDto.getUserLoginId(), partyOriginalDto.getCurrentPassword(), List.of()));

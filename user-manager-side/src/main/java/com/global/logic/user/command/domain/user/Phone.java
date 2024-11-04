@@ -11,7 +11,8 @@ public class Phone implements Comparable<Long>{
 
 
     @Override
-    public int compareTo(Long o) {
+    public int compareTo(Long o){
+        //TODO to be define
         return 0;
     }
 }

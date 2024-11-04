@@ -62,7 +62,6 @@ public class PasswordTest {
         assertEquals(message.get(), "The password have a illegal format");
     }
 
-    //TODO afinar la expresion para que permita solo 1 Mayuscula
     @Test
     void passwordFormatIsNotValidBecauseNotHaveOnly1UpperLetter() {
         Password password = new Password("m1PassW2rd");

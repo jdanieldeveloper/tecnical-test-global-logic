@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 public class ResponseFactoryTest {
 
-
     @Test
     public void createResponseHttp409ConflictErrorWhenIsBusinessException(){
         ResponseEntity<?> response = ResponseFactory.createError(

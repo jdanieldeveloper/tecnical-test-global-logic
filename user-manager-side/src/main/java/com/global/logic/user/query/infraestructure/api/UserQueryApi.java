@@ -2,10 +2,7 @@ package com.global.logic.user.query.infraestructure.api;
 
 
 import com.global.logic.user.command.infrastructure.api.factory.ResponseFactory;
-import com.global.logic.user.command.infrastructure.api.model.CreateUserReq;
-import com.global.logic.user.command.infrastructure.api.model.CreateUserResp;
 import com.global.logic.user.command.infrastructure.dto.PartyDto;
-import com.global.logic.user.command.infrastructure.persistence.dao.PartyDao;
 import com.global.logic.user.query.application.gateway.UserQueryGateway;
 import com.global.logic.user.query.infraestructure.api.model.LoginModelReq;
 import com.global.logic.user.query.infraestructure.api.model.LoginModelResp;
@@ -29,11 +26,6 @@ import java.util.List;
 public class UserQueryApi {
 
     private UserQueryGateway userQueryGateway;
-
-    @PostMapping(value = "/api/query/user/uuid")
-    public ResponseEntity<?> getUserByUuid(@RequestBody CreateUserReq request) {
-        return null; // TODO to be define
-    }
 
     @PostMapping(value = "/api/query/user/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginModelReq request, HttpServletRequest httpRequest) {

@@ -1,22 +1,23 @@
-package com.global.logic.user.query.infraestructure.service;
+package com.global.logic.user.query.application.service;
 
 import com.global.logic.user.command.infrastructure.config.UserManagerTestConfig;
 import com.global.logic.user.command.infrastructure.dto.PartyDto;
-import com.global.logic.user.command.infrastructure.exception.DatabaseException;
 import com.global.logic.user.command.infrastructure.persistence.dao.PartyDao;
-import org.junit.jupiter.api.BeforeAll;
+import com.global.logic.user.query.infraestructure.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.global.logic.user.command.infrastructure.fixture.PartyFixture.getPartyDtoWithAllFieldsToSave;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 
 /**
@@ -26,11 +27,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @SpringBootTest
-@ContextConfiguration(classes = UserManagerTestConfig.class)
-@Transactional
-public class UserDetailsServiceITest {
+@ContextConfiguration(classes = { UserManagerTestConfig.class})
+public class UserDetailsServiceTest {
 
-    @Autowired
+    @MockBean
     private PartyDao partyDao;
 
     @Autowired
@@ -42,7 +42,7 @@ public class UserDetailsServiceITest {
     @Test
     public void loadUserByUsernameOk()  {
         // setup
-        partyDao.saveUserWithRoles(partyDto);
+        when(partyDao.findPartyByUserLoginId(any())).thenReturn(partyDto);
         //
         UserDetails userDetails = userDetailsService.loadUserByUsername(partyDto.getUserLoginId());
         assertEquals(userDetails.getUsername(), partyDto.getUserLoginId());
@@ -51,7 +51,8 @@ public class UserDetailsServiceITest {
     @Test
     public void loadUserByUsernameNOkBecauseUserNameNotFound()  {
         // setup
-        partyDao.saveUserWithRoles(partyDto);
+        when(partyDao.findPartyByUserLoginId(any()))
+                .thenThrow(new UserNotFoundException("The party by user login wasn't found!!!"));
         //
         UsernameNotFoundException exception =
                 assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername("fail.mock@gmail.com"));
