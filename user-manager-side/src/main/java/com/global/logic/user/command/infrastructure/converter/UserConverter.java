@@ -39,7 +39,7 @@ public class UserConverter {
 
     public static Set<Phone> getPhones(PartyDto partyDto) {
         return Optional.ofNullable(partyDto)
-                .map(PartyDto::getPhonesDtos)
+                .map(PartyDto::getUserPhonesDtos)
                 .stream()
                 .flatMap(Collection::stream)
                 .map(phone -> new Phone(phone.getCountryCode(), phone.getCityCode(), phone.getContactNumber()))
@@ -56,7 +56,7 @@ public class UserConverter {
                     .userLoginId(user.getEmail().getValue())
                     .currentPassword(user.getPassword().getValue())
                     .userRolesDtos(getUserRolesDtos(user))
-                    .phonesDtos(getPhonesDtos(user))
+                    .userPhonesDtos(getPhonesDtos(user))
                     .build();
 
     public static List<UserRoleDto> getUserRolesDtos(User user) {
@@ -83,14 +83,4 @@ public class UserConverter {
                         .build())
                 .collect(Collectors.toList());
     }
-
-    public static Function<PhoneModel, Phone> phoneModelToPhone = model ->
-            new Phone(model.getCountryCode(), model.getCityCode(), model.getNumber());
-
-    public static Function<List<PhoneModel>, List<Phone>> phoneModelsToPhones = models ->
-            Optional.ofNullable(models)
-                    .stream()
-                    .flatMap(Collection::stream)
-                    .map(phoneModelToPhone)
-                    .collect(Collectors.toList());
 }

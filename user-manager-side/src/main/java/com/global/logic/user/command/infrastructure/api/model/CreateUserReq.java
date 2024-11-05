@@ -1,7 +1,6 @@
 package com.global.logic.user.command.infrastructure.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.global.logic.user.command.domain.user.Phone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Builder
@@ -31,6 +30,6 @@ public class CreateUserReq implements Serializable {
     private String password;
 
     @JsonProperty(value = "phones")
-    private Set<Phone> phones;
+    private List<PhoneModel> phones;
 
 }

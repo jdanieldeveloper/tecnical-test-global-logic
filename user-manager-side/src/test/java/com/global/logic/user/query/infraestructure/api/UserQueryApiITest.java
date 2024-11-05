@@ -47,6 +47,8 @@ public class UserQueryApiITest {
         when(partyMapper.saveParty(any())).thenReturn(1);
         when(partyMapper.saveUserLogin(any())).thenReturn(1);
         when(partyMapper.saveUserRole(any())).thenReturn(1);
+        when(partyMapper.saveUserContact(any())).thenReturn(1);
+        when(partyMapper.saveUserPhone(any())).thenReturn(1);
         when(partyMapper.findPartyByUserLoginId(any()))
                 .thenReturn(null)
                 .thenReturn(getPartyDtoWithAllFieldsSavedWithPassEncrypted());
@@ -54,7 +56,7 @@ public class UserQueryApiITest {
                 .thenReturn(getPartyDtoWithAllFieldsSavedWithPassEncrypted().getUserRolesDtos());
 
         // generate token
-        MvcResult result = mockMvc.perform(post("/api/command/user/sign-up")
+        MvcResult result = mockMvc.perform(post("/api/v1/command/users/sign-up")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(getCreateUserReqWillAllOkFields())))
                 .andDo(print())
@@ -66,7 +68,7 @@ public class UserQueryApiITest {
                 objectMapper.readValue(result.getResponse().getContentAsString(), CreateUserResp.class);
 
         // login user and auth by new token
-        mockMvc.perform(post("/api/query/user/login")
+        mockMvc.perform(post("/api/v1/query/users/login")
                         .header("Authorization", "Bearer " + response.getToken())
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(loginUserReqWillAllOkFields())))
@@ -90,6 +92,8 @@ public class UserQueryApiITest {
         verify(partyMapper, times(1)).saveUserLogin(any());
         // save 2 roles for default
         verify(partyMapper, times(2)).saveUserRole(any());
+        verify(partyMapper, times(2)).saveUserContact(any());
+        verify(partyMapper, times(2)).saveUserPhone(any());
         // call when find user and auth user
         verify(partyMapper, times(4)).findPartyByUserLoginId(any());
         verify(partyMapper, times(3)).findRoleByUserLoginId(any());

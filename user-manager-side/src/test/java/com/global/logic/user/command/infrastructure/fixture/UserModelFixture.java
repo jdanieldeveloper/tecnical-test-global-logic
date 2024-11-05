@@ -1,10 +1,10 @@
 package com.global.logic.user.command.infrastructure.fixture;
 
-import com.global.logic.user.command.domain.user.Phone;
 import com.global.logic.user.command.infrastructure.api.model.CreateUserReq;
+import com.global.logic.user.command.infrastructure.api.model.PhoneModel;
 import com.global.logic.user.query.infraestructure.api.model.LoginModelReq;
 
-import java.util.Set;
+import java.util.List;
 
 public class UserModelFixture {
 
@@ -13,7 +13,17 @@ public class UserModelFixture {
                 .name("Daniel Carvajal")
                 .email("dcarvajal3@gmail.com")
                 .password("m1Passw2rd")
-                .phones(Set.of(new Phone("56", 9, 12345678L)))
+                .phones(List.of(
+                        PhoneModel.builder()
+                                .countryCode("56")
+                                .cityCode(9)
+                                .number(12345678)
+                                .build(),
+                        PhoneModel.builder()
+                                .countryCode("56")
+                                .cityCode(9)
+                                .number(87654321L)
+                                .build()))
                 .build();
     }
 
@@ -22,7 +32,17 @@ public class UserModelFixture {
                 .name("Daniel Carvajal")
                 .email("dcarva") // without domain
                 .password("m1Passw2rd")
-                .phones(Set.of(new Phone("56", 9, 12345678L)))
+                .phones(List.of(
+                        PhoneModel.builder()
+                                .countryCode("56")
+                                .cityCode(9)
+                                .number(12345678)
+                                .build(),
+                        PhoneModel.builder()
+                                .countryCode("56")
+                                .cityCode(9)
+                                .number(87654321L)
+                                .build()))
                 .build();
     }
 
@@ -31,7 +51,17 @@ public class UserModelFixture {
                 .name("Daniel Carvajal")
                 .email("dcarvajal3@gmail.com")
                 .password("123456789101112") // larger than 12 and format incorrectly
-                .phones(Set.of(new Phone("56", 9, 12345678L)))
+                .phones(List.of(
+                        PhoneModel.builder()
+                                .countryCode("56")
+                                .cityCode(9)
+                                .number(12345678)
+                                .build(),
+                        PhoneModel.builder()
+                                .countryCode("56")
+                                .cityCode(9)
+                                .number(87654321L)
+                                .build()))
                 .build();
     }
 

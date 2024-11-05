@@ -89,7 +89,7 @@ public class UserRepositoryTest {
         User user = getUserWithAllFieldsToAdd();
         PartyDto partyDto = userToPartyDto.apply(user);
 
-        when(partyDao.saveUserWithRoles(any(PartyDto.class))).thenReturn(partyDto);
+        when(partyDao.saveUser(any(PartyDto.class))).thenReturn(partyDto);
 
         Either<Throwable, User>  userAdded = userRepository.addUser(user);
         assertTrue(userAdded.isRight());
@@ -100,7 +100,7 @@ public class UserRepositoryTest {
     public void addUserIdNoOkBecauseThereIsDatabaseProblems()  {
         User user = getUserWithAllFieldsToAdd();
 
-        when(partyDao.saveUserWithRoles(any(PartyDto.class)))
+        when(partyDao.saveUser(any(PartyDto.class)))
                 .thenThrow(new DatabaseException("There is problems with database"));
 
         Either<Throwable, User>  userAdded = userRepository.addUser(user);

@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+import static com.global.logic.user.command.infrastructure.converter.UserModelConverter.userPhoneDtosToPhoneModels;
+
 @Slf4j
 @RestController
 @AllArgsConstructor // DI by constructor
@@ -27,7 +29,7 @@ public class UserQueryApi {
 
     private UserQueryGateway userQueryGateway;
 
-    @PostMapping(value = "/api/query/user/login")
+    @PostMapping(value = "/api/v1/query/users/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginModelReq request, HttpServletRequest httpRequest) {
         // validate token integrity
         Either<UserAuthenticationException, Boolean> validAuthToken =
@@ -64,7 +66,7 @@ public class UserQueryApi {
                         .name(foundPartyDto.get().getPartyName())
                         .email(foundPartyDto.get().getUserLoginId()) // email
                         .password(foundPartyDto.get().getCurrentPassword())
-                        //.phones()
+                        .phones(userPhoneDtosToPhoneModels.apply(foundPartyDto.get().getUserPhonesDtos()))
                         .build()
         );
 

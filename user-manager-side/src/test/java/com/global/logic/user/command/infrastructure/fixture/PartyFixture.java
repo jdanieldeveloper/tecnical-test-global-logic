@@ -11,6 +11,8 @@ import java.util.UUID;
 
 import static com.global.logic.user.command.infrastructure.fixture.UserRoleFixture.getUserRoleDtoWithVisitorCreateRole;
 import static com.global.logic.user.command.infrastructure.fixture.UserRoleFixture.getUserRoleDtoWithVisitorUpdateRole;
+import static com.global.logic.user.command.infrastructure.fixture.UserPhoneFixture.getUserContactPhoneDto1;
+import static com.global.logic.user.command.infrastructure.fixture.UserPhoneFixture.getUserContactPhoneDto2;
 
 public class PartyFixture {
 
@@ -35,6 +37,10 @@ public class PartyFixture {
                 .userRolesDtos(List.of(
                         getUserRoleDtoWithVisitorCreateRole(),
                         getUserRoleDtoWithVisitorUpdateRole()))
+                .userPhonesDtos(List.of(
+                        getUserContactPhoneDto1(),
+                        getUserContactPhoneDto2()
+                ))
                 .build();
     }
 
@@ -59,10 +65,14 @@ public class PartyFixture {
                 .userRolesDtos(List.of(
                         getUserRoleDtoWithVisitorCreateRole(),
                         getUserRoleDtoWithVisitorUpdateRole()))
+                .userPhonesDtos(List.of(
+                        getUserContactPhoneDto1(),
+                        getUserContactPhoneDto2()
+                ))
                 .build();
     }
 
-    public static PartyDto getPartyDtoWithAllFieldsSavedWithDiferentPassEncrypted() {
+    public static PartyDto getPartyDtoWithAllFieldsSavedWithDifferentPassEncrypted() {
         return PartyDto.builder()
                 .partyId(1L)
                 .partyUuid(UUID.randomUUID().toString())
@@ -83,6 +93,10 @@ public class PartyFixture {
                 .userRolesDtos(List.of(
                         getUserRoleDtoWithVisitorCreateRole(),
                         getUserRoleDtoWithVisitorUpdateRole()))
+                .userPhonesDtos(List.of(
+                        getUserContactPhoneDto1(),
+                        getUserContactPhoneDto2()
+                ))
                 .build();
     }
 
@@ -102,6 +116,10 @@ public class PartyFixture {
                 //
                 .userLoginId("dcarvajal3@gmail.com")
                 .currentPassword(new BCryptPasswordEncoder().encode("m1Passw2rd"))
+                .userPhonesDtos(List.of(
+                        getUserContactPhoneDto1(),
+                        getUserContactPhoneDto2()
+                ))
                 .build();
     }
 }

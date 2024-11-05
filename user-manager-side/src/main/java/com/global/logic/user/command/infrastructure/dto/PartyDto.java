@@ -31,7 +31,7 @@ public class PartyDto {
 	private String currentPassword;
 
 	@Singular
-	private List<UserPhoneDto> phonesDtos;
+	private List<UserPhoneDto> userPhonesDtos;
 
 	@Singular
 	private List<UserRoleDto> userRolesDtos;

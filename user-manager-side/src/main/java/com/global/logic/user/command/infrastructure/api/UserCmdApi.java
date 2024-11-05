@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import static com.global.logic.user.command.infrastructure.converter.UserModelConverter.phoneModelsToPhones;
+
+
 import java.util.List;
 
 
@@ -33,7 +35,7 @@ public class UserCmdApi {
     private CommandHandler commandHandler;
     private UserQueryGateway userQueryGateway;
 
-    @PostMapping(value = "/api/command/user/sign-up")
+    @PostMapping(value = "/api/v1/command/users/sign-up")
     public ResponseEntity<?> creteUser(@Validated @RequestBody CreateUserReq request) {
         // get user by user login
         Either<UserNotFoundException, PartyDto> foundPartyDto =
@@ -50,7 +52,7 @@ public class UserCmdApi {
                         .name(request.getName())
                         .email(request.getEmail())
                         .password(request.getPassword())
-                        .phones(request.getPhones())
+                        .phones(phoneModelsToPhones.apply(request.getPhones()))
                         .build());
 
         if (createUserCmd.hasErrors()) {

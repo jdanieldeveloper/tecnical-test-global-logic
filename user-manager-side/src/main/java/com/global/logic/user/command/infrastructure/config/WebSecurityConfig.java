@@ -33,8 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers("/index.html").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/command/user/sign-up").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/query/user/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/command/users/sign-up").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/query/users/login").permitAll()
                 //.antMatchers(HttpMethod.POST, "/api/auth/validate").permitAll()
                 .anyRequest().authenticated()
                 // this disables session creation on Spring Security

@@ -15,7 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.global.logic.user.command.infrastructure.fixture.PartyFixture.getPartyDtoWithAllFieldsSavedWithDiferentPassEncrypted;
+import static com.global.logic.user.command.infrastructure.fixture.PartyFixture.getPartyDtoWithAllFieldsSavedWithDifferentPassEncrypted;
 import static com.global.logic.user.command.infrastructure.fixture.PartyFixture.getPartyDtoWithAllFieldsSavedWithPassEncrypted;
 import static com.global.logic.user.command.infrastructure.fixture.UserModelFixture.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -53,13 +53,15 @@ public class UserCmdApiTest {
         when(partyMapper.saveParty(any())).thenReturn(1);
         when(partyMapper.saveUserLogin(any())).thenReturn(1);
         when(partyMapper.saveUserRole(any())).thenReturn(1);
+        when(partyMapper.saveUserContact(any())).thenReturn(1);
+        when(partyMapper.saveUserPhone(any())).thenReturn(1);
         when(partyMapper.findPartyByUserLoginId(any()))
                 .thenReturn(null)
                 .thenReturn(getPartyDtoWithAllFieldsSavedWithPassEncrypted());
         when(partyMapper.findRoleByUserLoginId(any()))
                 .thenReturn(getPartyDtoWithAllFieldsSavedWithPassEncrypted().getUserRolesDtos());
         //
-        mockMvc.perform(post("/api/command/user/sign-up")
+        mockMvc.perform(post("/api/v1/command/users/sign-up")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(getCreateUserReqWillAllOkFields())))
                 .andDo(print())
@@ -77,6 +79,8 @@ public class UserCmdApiTest {
         verify(partyMapper, times(1)).saveUserLogin(any());
         // save 2 roles for default
         verify(partyMapper, times(2)).saveUserRole(any());
+        verify(partyMapper, times(2)).saveUserContact(any());
+        verify(partyMapper, times(2)).saveUserPhone(any());
         // call when find user and auth user
         verify(partyMapper, times(2)).findPartyByUserLoginId(any());
         verify(partyMapper, times(1)).findRoleByUserLoginId(any());
@@ -88,7 +92,7 @@ public class UserCmdApiTest {
         when(partyMapper.findPartyByUserLoginId(any()))
                 .thenReturn(getPartyDtoWithAllFieldsSavedWithPassEncrypted());
         //
-        mockMvc.perform(post("/api/command/user/sign-up")
+        mockMvc.perform(post("/api/v1/command/users/sign-up")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(getCreateUserReqWillAllOkFields())))
                 .andDo(print())
@@ -105,7 +109,7 @@ public class UserCmdApiTest {
     @Test
     public void noCreateUserAndGetHttp400OBadRequestBecauseFormatEmailInvalid() throws Exception {
         //
-        mockMvc.perform(post("/api/command/user/sign-up")
+        mockMvc.perform(post("/api/v1/command/users/sign-up")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(getCreateUserReqBadRequestEmailInvalid())))
                 .andDo(print())
@@ -119,7 +123,7 @@ public class UserCmdApiTest {
     @Test
     public void noCreateUserAndGetHttp400OBadRequestBecauseFormatPasswordInvalid() throws Exception {
         //
-        mockMvc.perform(post("/api/command/user/sign-up")
+        mockMvc.perform(post("/api/v1/command/users/sign-up")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(getCreateUserReqBadRequestPasswordInvalid())))
                 .andDo(print())
@@ -135,7 +139,7 @@ public class UserCmdApiTest {
         // setup
         when(partyMapper.nextValueForIdentifier()).thenThrow(new DatabaseException("There is Database problem"));
         //
-        mockMvc.perform(post("/api/command/user/sign-up")
+        mockMvc.perform(post("/api/v1/command/users/sign-up")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(getCreateUserReqWillAllOkFields())))
                 .andDo(print())
@@ -155,14 +159,16 @@ public class UserCmdApiTest {
         when(partyMapper.saveParty(any())).thenReturn(1);
         when(partyMapper.saveUserLogin(any())).thenReturn(1);
         when(partyMapper.saveUserRole(any())).thenReturn(1);
+        when(partyMapper.saveUserContact(any())).thenReturn(1);
+        when(partyMapper.saveUserPhone(any())).thenReturn(1);
         when(partyMapper.findPartyByUserLoginId(any()))
                 .thenReturn(null)
-                .thenReturn(getPartyDtoWithAllFieldsSavedWithDiferentPassEncrypted());
+                .thenReturn(getPartyDtoWithAllFieldsSavedWithDifferentPassEncrypted());
         when(partyMapper.findRoleByUserLoginId(any()))
-                .thenReturn(getPartyDtoWithAllFieldsSavedWithDiferentPassEncrypted().getUserRolesDtos());
+                .thenReturn(getPartyDtoWithAllFieldsSavedWithDifferentPassEncrypted().getUserRolesDtos());
 
         //
-        mockMvc.perform(post("/api/command/user/sign-up")
+        mockMvc.perform(post("/api/v1/command/users/sign-up")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(getCreateUserReqWillAllOkFields())))
                 .andDo(print())
@@ -177,6 +183,8 @@ public class UserCmdApiTest {
         verify(partyMapper, times(1)).saveUserLogin(any());
         // save 2 roles for default
         verify(partyMapper, times(2)).saveUserRole(any());
+        verify(partyMapper, times(2)).saveUserContact(any());
+        verify(partyMapper, times(2)).saveUserPhone(any());
         // call when find user and auth user
         verify(partyMapper, times(2)).findPartyByUserLoginId(any());
         verify(partyMapper, times(1)).findRoleByUserLoginId(any());

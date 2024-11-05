@@ -40,7 +40,7 @@ public class UserRepositoryImpl implements UserRepository {
         return Try.of(() ->
                         Optional.ofNullable(user)
                                 .map(userToPartyDto)
-                                .map(partyDao::saveUserWithRoles)
+                                .map(partyDao::saveUser)
                                 .map(partyDtoToUser)
                                 .orElseThrow(IllegalStateException::new))
                 .toEither();

@@ -3,6 +3,7 @@ package com.global.logic.user.command.infrastructure.persistence.dao.impl;
 import com.global.logic.user.command.infrastructure.dto.PartyDto;
 import com.global.logic.user.command.infrastructure.dto.UserPhoneDto;
 import com.global.logic.user.command.infrastructure.dto.UserRoleDto;
+import com.global.logic.user.command.infrastructure.enums.ContactEnum;
 import com.global.logic.user.command.infrastructure.enums.UserStatusEnum;
 import com.global.logic.user.command.infrastructure.enums.UserTypeEnum;
 import com.global.logic.user.command.infrastructure.exception.DatabaseException;
@@ -110,7 +111,7 @@ public class PartyDaoImpl implements PartyDao {
             // encode pass for security
             partyDto.setCurrentPassword(passwordEncoder.encode(partyDto.getCurrentPassword()));
 
-            rowAffected = partyMapper.saveUserLogin(partyDto);
+           rowAffected = partyMapper.saveUserLogin(partyDto);
             if (rowAffected == 1) {
                 log.info("User was created correctly!!!");
 
@@ -148,7 +149,7 @@ public class PartyDaoImpl implements PartyDao {
 
     @Override
     @Transactional
-    public PartyDto saveUserWithRoles(PartyDto partyDto) {
+    public PartyDto saveUser(PartyDto partyDto) {
         return Optional.ofNullable(partyDto)
                 .map(this::saveUserLogin)
                 .map(this::saveParty)
@@ -161,6 +162,30 @@ public class PartyDaoImpl implements PartyDao {
                                     .map(this::saveUserRole)
                                     .collect(Collectors.toList());
                     log.info("[{}] Roles was associated to user [{}]", userRoleDtos.size(), party.getPartyName());
+
+                    return party;
+                })
+                .map(party -> {
+                    List<UserPhoneDto> userPhoneDtos =
+                            Optional.of(party)
+                                    .map(PartyDto::getUserPhonesDtos)
+                                    .stream()
+                                    .flatMap(Collection::stream)
+                                    .map(contact -> {
+                                        long contactMechId = partyMapper.nextValueForContact();
+                                        // associated contact with telecom number
+                                        contact.setContactMechId(contactMechId);
+                                        contact.setContactMechTypeId(ContactEnum.TELECOM_NUMBER.getContactId());
+                                        contact.setTelecomNumberId(contactMechId);
+                                        //
+                                        saveUserPhone(contact);
+                                        return contact;
+                                    })
+                                    // create relationship
+                                    .map(this::saveUserContact)
+
+                                    .collect(Collectors.toList());
+                    log.info("[{}] Phones was associated to user [{}]", userPhoneDtos.size(), party.getPartyName());
 
                     return party;
                 })
@@ -217,6 +242,9 @@ public class PartyDaoImpl implements PartyDao {
             if (Objects.nonNull(partyDto)) {
                 List<UserRoleDto> userRolesDtos = findRoleByUserLoginId(userLoginId);
                 partyDto.setUserRolesDtos(userRolesDtos);
+
+                List<UserPhoneDto> userPhoneDtos = findPhoneByUserLoginId(userLoginId);
+                partyDto.setUserPhonesDtos(userPhoneDtos);
                 //
                 log.info("The party by user login was found!!!");
             } else {

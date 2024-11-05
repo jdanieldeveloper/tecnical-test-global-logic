@@ -17,7 +17,7 @@
                 LAST_CURRENCY_UOM VARCHAR(20),
                 LAST_LOCALE VARCHAR(10),
                 LAST_TIME_ZONE VARCHAR(60),
-                LAST_LOGIN_DATE_TIME TIMESTAMP,
+                LAST_LOGIN_DATE TIMESTAMP,
                 DISABLED_DATE_TIME TIMESTAMP,
                 SUCCESSIVE_FAILED_LOGINS NUMERIC(20,0),
                 EXTERNAL_AUTH_ID VARCHAR(255),

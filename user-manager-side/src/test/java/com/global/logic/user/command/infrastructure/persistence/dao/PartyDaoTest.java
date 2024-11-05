@@ -180,16 +180,18 @@ public class PartyDaoTest {
     }
 
     @Test
-    public void saveUserWithRolesOk()  {
+    public void saveUserOk()  {
         // setup
         when(partyMapper.nextValueForIdentifier()).thenReturn(1L);
         when(partyMapper.saveParty(any())).thenReturn(1);
         when(partyMapper.saveUserLogin(any())).thenReturn(1);
         when(partyMapper.saveUserRole(any())).thenReturn(1);
+        when(partyMapper.saveUserContact(any())).thenReturn(1);
+        when(partyMapper.saveUserPhone(any())).thenReturn(1);
 
         PartyDto partyDto = getPartyDtoWithAllFieldsToSave();
 
-        PartyDto partySaved = partyDao.saveUserWithRoles(partyDto);
+        PartyDto partySaved = partyDao.saveUser(partyDto);
         assertNotNull(partySaved);
     }
 
