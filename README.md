@@ -84,7 +84,38 @@ java --version
 ```sh
 ./gradlew bootRun
 ```
-Si deseas ejecutar los test y verificar la covertura del codigo +80% ejecuta los siguientes comandos:
+
+5. Para testear el los endpoints se utilizo posman se pueden importar los siguientes scripts:
+- Endpoint de creacion de usuario:
+```sh
+curl --location 'http://127.0.0.1:8083/user-manager-side/api/v1/command/users/sign-up' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Daniel Carvajal",
+    "email": "dcarvajal1@gmail.com",
+    "password": "m1Passw2rd",
+    "phones": [
+        {
+            "countryCode": "56",
+            "cityCode": 9,
+            "number": 12345678
+        }
+    ]
+}'
+```
+
+- Endpoint de login de usuario:
+```sh
+curl --location 'http://127.0.0.1:8083/user-manager-side/api/v1/query/users/login' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkY2FydmFqYWwxQGdtYWlsLmNvbSIsIlJPTEVfVklTSVRPUl9DUkVBVEUiOiJST0xFX1ZJU0lUT1JfQ1JFQVRFIiwiUk9MRV9WSVNJVE9SX1JFQUQiOiJST0xFX1ZJU0lUT1JfUkVBRCIsImV4cCI6MTczMDk1NTE0OSwiaWF0IjoxNzMwOTE5MTQ5fQ.z12LXSLt-2gDjVWPPiUH5bBiD-p7EiBTmMnt9w9iqSk' \
+--data-raw '{  
+  "email": "dcarvajal1@gmail.com",
+  "password": "m1Passw2rd"  
+}'
+```
+ 
+Nota: Si deseas ejecutar los test y verificar la covertura del codigo +80% ejecuta los siguientes comandos:
 ```sh
 cd user-manager-side
 ./gradlew test
