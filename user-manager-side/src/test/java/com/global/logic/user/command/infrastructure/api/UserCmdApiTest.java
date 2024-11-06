@@ -65,7 +65,7 @@ public class UserCmdApiTest {
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(getCreateUserReqWillAllOkFields())))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.created").exists())

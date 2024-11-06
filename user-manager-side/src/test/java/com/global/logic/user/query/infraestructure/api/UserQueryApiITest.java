@@ -60,7 +60,7 @@ public class UserQueryApiITest {
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(getCreateUserReqWillAllOkFields())))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json"))
                 .andReturn();
         // get response with generated token
@@ -82,8 +82,8 @@ public class UserQueryApiITest {
                 .andExpect(jsonPath("$.isActive").exists())
                 .andExpect(jsonPath("$.name").exists())
                 .andExpect(jsonPath("$.email").exists())
-                .andExpect(jsonPath("$.password").exists());
-                //.andExpect(jsonPath("$.phones").exists()); phones
+                .andExpect(jsonPath("$.password").exists())
+                .andExpect(jsonPath("$.phones").exists());
 
 
         // verify

@@ -21,7 +21,17 @@ import static com.global.logic.user.command.infrastructure.converter.UserModelCo
 public class ResponseFactory {
 
     public static ResponseEntity<?> createSuccess(Object body) {
-        return ResponseEntity.ok(body);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                //.headers()
+                .body(body);
+    }
+
+    public static ResponseEntity<?> createCreated(Object body) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                //.headers()
+                .body(body);
     }
 
     public static ResponseEntity<?> createError(Class<? extends CustomException> type, List<Throwable> errors) {

@@ -68,7 +68,7 @@ public class UserCmdApi {
         }
         log.info("User [{}] has been auth correctly!!!", request.getName());
 
-        return ResponseFactory.createSuccess(
+        return ResponseFactory.createCreated(
                 CreateUserResp.builder()
                         .uuid(createUserCmd.getUuid())
                         .createdDate(createUserCmd.getCreatedDate())
