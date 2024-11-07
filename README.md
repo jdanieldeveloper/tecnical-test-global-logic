@@ -1,12 +1,10 @@
 ## Índice
 1. [Introducción](#introducción)
-2. [Requisitos del Sistema](#requisitos-del-sistema)
+2. [Solución propuesta](#Solución-propuesta)
 3. [Instalación y Configuración](#instalación-y-configuración)
-4. [Patrones de Diseño](#patrones-de-diseño)
 5. [Diagrama de Secuencia](#diagrama-de-secuencia)
 6. [Diagrama de Componentes](#diagrama-de-componentes)
-7. [Pruebas Unitarias](#pruebas-unitarias)
-8. [Conclusiones](#conclusiones)
+
 
 ## Introducción
 El siguiente proyecto se desarrollo con el fin de postular a la posición a Java Dev Senior que mantiene actualmente la empresa GlobalLogic. Para poder evaluar,
