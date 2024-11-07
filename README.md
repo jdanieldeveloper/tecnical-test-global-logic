@@ -4,7 +4,7 @@
 3. [Instalación y Configuración](#instalación-y-configuración)
 5. [Diagrama de Secuencia](#diagrama-de-secuencia)
 6. [Diagrama de Componentes](#diagrama-de-componentes)
-
+[input.md](..%2F..%2FDownloads%2F%5BUpdated%20Octubre%202023%5D%20Ejercicio%20%231%20-%20BCI%20%283%29.md%2Finput.md)
 
 ## Introducción
 El siguiente proyecto se desarrollo con el fin de postular a la posición a Java Dev Senior que mantiene actualmente la empresa GlobalLogic. Para poder evaluar,
@@ -12,33 +12,108 @@ se debe generar un test de código que consiste en crear un microservicio en Spr
 
 ## Requisitos
 
-- **Lenguaje y Entorno**: El microservicio está desarrollado en **Java** (versiones compatibles: 8 u 11), y debe utilizar al menos dos características específicas de estas versiones.
+Este proyecto debe consistir en el desarrollo de un microservicio utilizando **Spring Boot 2.5.14** y **Gradle** (hasta la versión 7.4) para la creación y consulta de usuarios. Este README contiene instrucciones para la construcción, ejecución y documentación del proyecto.
 
-- **Framework y Herramientas de Construcción**:
-    - **Spring Boot**: Versión 2.5.14.
-    - **Gradle**: Hasta la versión 7.4, utilizado para la gestión y compilación del proyecto.
+### Tecnologías y Requisitos
 
-- **Pruebas Unitarias**: Se requiere un mínimo del **80% de cobertura en pruebas unitarias** sobre las funcionalidades del servicio, utilizando **Spock** o **JUnit** como frameworks de pruebas para asegurar la calidad y confiabilidad del código.
+- **Java 8 u 11** (Utilización de al menos dos características de estas versiones).
+- **Spring Boot 2.5.14**
+- **Gradle** hasta la versión 7.4
+- **Spring Data** para persistencia de datos en **H2 Database**.
+- **JWT** para generación de tokens.
+- **Spock Framework** o **JUnit** para pruebas unitarias con una cobertura mínima de 80% en el servicio.
 
-- **Endpoints**:
-    - **/sign-up**: Endpoint para la creación de usuarios con validaciones específicas para el formato de email y contraseña. En caso de éxito, devuelve la información del usuario, incluyendo:
-        - `id`: Identificador único (preferentemente un UUID).
-        - `created`: Fecha de creación del usuario.
-        - `lastLogin`: Última fecha de inicio de sesión.
-        - `token`: Token de acceso JWT.
-        - `isActive`: Estado de habilitación del usuario en el sistema.
-    - **/login**: Endpoint para consultar un usuario mediante el token JWT. El token se actualiza en cada solicitud exitosa.
+### Endpoints
 
-- **Formato de Datos**: Todos los endpoints deben aceptar y devolver datos en formato JSON, incluyendo los mensajes de error con el código HTTP correspondiente.
+#### 1. `/sign-up` - Creación de Usuario
 
-- **Base de Datos**: Utiliza una base de datos **H2** para la persistencia de datos de usuario, gestionada con Spring Data. Es recomendable encriptar las contraseñas antes de almacenarlas.
-  
-- **Manejo de Errores**: En caso de error, el sistema debe devolver un JSON con:
-    - `timestamp`: Marca de tiempo del error.
-    - `codigo`: Código de error.
-    - `detail`: Descripción del error.
+- **Método:** `POST`
+- **Descripción:** Permite crear un nuevo usuario.
+- **Formato de Entrada:**
+  ```json
+  {
+      "name": "String",
+      "email": "String",
+      "password": "String",
+      "phones": [
+          {
+              "number": long,
+              "citycode": int,
+              "contrycode": "String"
+          }
+      ]
+  }
+  ```
 
-- ## Solución propuesta
+### Requisitos de Validación y Persistencia de Usuario
+
+1. **Validación de Correo Electrónico:**
+    - El correo debe seguir una expresión regular para validar que su formato sea el correcto (ejemplo: `aaaaaaa@undominio.algo`).
+    - Si no cumple con el formato adecuado, se debe enviar un mensaje de error.
+
+2. **Validación de Clave:**
+    - La clave debe seguir una expresión regular para validar que su formato sea el correcto.
+    - Debe contener solo una letra mayúscula y exactamente dos números (no necesariamente consecutivos).
+    - La combinación debe incluir letras minúsculas.
+    - El largo máximo de la clave debe ser de 12 caracteres y el mínimo de 8 caracteres.
+    - Ejemplo: `"a2asfGfdfdf4"`.
+    - Si no cumple con el formato adecuado, se debe enviar un mensaje de error.
+
+3. **Campos Opcionales:**
+    - El nombre y los teléfonos son campos opcionales.
+
+4. **Datos a Retornar en Caso de Éxito:**
+    - `id`: ID del usuario (puede ser generado por el banco de datos, pero sería más deseable un UUID).
+    - `created`: Fecha de creación del usuario.
+    - `lastLogin`: Fecha del último ingreso.
+    - `token`: Token de acceso de la API (debe utilizar JWT).
+    - `isActive`: Indica si el usuario sigue habilitado dentro del sistema.
+
+5. **Persistencia de Usuario:**
+    - El usuario debe ser persistido en una base de datos utilizando Spring Data (se recomienda usar H2).
+    - En el caso de la contraseña, sería ideal que se pudiera encriptar.
+
+6. **Manejo de Usuarios Existentes:**
+    - Si el usuario ya existe en la base de datos, se debe enviar un mensaje de error indicando que el usuario ya existe.
+
+- **En caso de error de un endpoint debe retornar:** 
+
+  ```json
+  {
+    "error": [{
+      "timestamp": "Timestamp",
+      "codigo": "int",
+      "detail": "String"
+    }]
+  }
+
+#### Endpoint Obligatorio: `/login`
+
+Este endpoint será utilizado para consultar el usuario. Para ello, debe utilizar el token generado en el endpoint anterior para realizar la consulta y retornar toda la información del usuario persistido. Tenga en cuenta que el token debe cambiar al ejecutar el endpoint, por lo que se actualizará el token.
+
+#### Contrato de salida:
+  ```json
+  {
+    "id": "e5c6cf84-8860-4c00-91cd-22d3be28904e",
+    "created": "Nov 16, 2021 12:51:43 PM",
+    "lastLogin": "Nov 16, 2021 12:51:43 PM",
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdWxpb0B0ZXN0...",
+    "isActive": true,
+    "name": "Julio Gonzalez",
+    "email": "julio@testssw.cl",
+    "password": "a2asfGfdfdf4",
+    "phones": [
+      {
+        "number": 87650009,
+        "citycode": 7,
+        "contrycode": "25"
+      }
+    ]
+  }
+```
+ 
+
+## Solución propuesta
 Se genera un microservicio llamado user-manager-side el cual contiene varios aspectos a conciderar:
 1. Se crea en base a un patron arquitectonico llamado CQRS(Command and Query Segregation) que separa las 
 responsabilidades de creacion(commands) de las de lecturas(querys). 
